@@ -1,0 +1,12 @@
+version: '3'
+services:
+  nuls:
+    build:
+      context: ../..
+      dockerfile: ./environment/dev/Dockerfile
+    image: dev/nuls
+    container_name: dev/nuls
+    volumes:
+      - ../..:/code
+    ports:
+      - "8080:8080"
