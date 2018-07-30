@@ -1,0 +1,9 @@
+app:
+  env: production
+  metaBase: /
+  localStoreKey: nulsSharedNodeRewardsCalculator
+  api:
+    nulsWorld:
+      host: https://nuls.world
+      port: 80
+      base: ''
