@@ -1,4 +1,4 @@
-import { ConsensusAgentNodeStatus } from './../model/consensus';
+import { ConsensusAgentNodeStatus, ConsensusAgentNode, agentNodeId } from './../model/consensus';
 import Vue from 'vue';
 
 const nulsDecimals: number = 8;

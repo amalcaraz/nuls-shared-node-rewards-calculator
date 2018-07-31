@@ -10,8 +10,8 @@
     </v-toolbar>
     <v-content>
       <v-container fill-height>
-        <v-layout justify-center align-center>
-          <v-flex shrink> 
+        <v-layout justify-center>
+          <v-flex> 
             <router-view/>
           </v-flex>
         </v-layout>

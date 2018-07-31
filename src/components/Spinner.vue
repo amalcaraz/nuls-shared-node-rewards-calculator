@@ -13,7 +13,7 @@ import pulseLoader from 'vue-spinner/src/PulseLoader.vue';
   },
 })
 export default class Spinner extends Vue {
-  @Prop() public size: string = '25px';
+  @Prop({default: '25px'}) public size!: string;
   @Prop() public loading!: boolean ;
   public customTheme: any = customTheme;
 }

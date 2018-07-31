@@ -3,16 +3,23 @@
     <spinner :loading="agentNodes.length == 0"></spinner>
     <v-flex xs12 v-if="agentNodes.length > 0">    
       <v-container grid-list-lg fluid>
-      <v-layout row wrap>
-        <v-flex xs12 sm6 lg4 v-for="node in agentNodes"
-                  v-if="node"
-                  :key="node.agentId">
-          <agent-node
-                  :agentNode="node"
-                  @remove="onRemoveQr">
-          </agent-node>
-        </v-flex>
-      </v-layout>
+        <v-layout row v-if="agentNodes.length > 10">
+          <v-flex xs12>
+            <v-text-field
+              solo
+              label="Search"
+              append-icon="search"
+              v-model="filter"
+            ></v-text-field>
+          </v-flex>
+        </v-layout>
+        <v-layout row wrap>
+          <v-flex xs12 sm6 lg4 v-for="node in filteredAgentNodes"
+                    v-if="node"
+                    :key="node.agentId">
+            <agent-node :agentNode="node"></agent-node>
+          </v-flex>
+        </v-layout>
       </v-container>
     </v-flex>
   </v-layout>
@@ -30,34 +37,12 @@ import AgentNode from '@/components/AgentNode.vue';
 })
 export default class AgentNodeCollection extends Vue {
   @Prop() public agentNodes!: ConsensusAgentNode[];
+  public filter: string = '';
 
-  private formIsOpen: boolean = false;
-
-  // public created() {
-  //   (this as any).retrieveQrs();
-  // }
-
-  // public onSubmit(qr: string) {
-  //   (this as any).insertQrs(qr);
-  //   this.closeForm();
-  //   this.saveQrs();
-  // }
-
-  // public onRemoveQr(qr: string) {
-  //   (this as any).removeQrs(qr);
-  //   this.saveQrs();
-  // }
-
-  // public openForm() {
-  //   this.formIsOpen = true;
-  // }
-
-  // public closeForm() {
-  //   this.formIsOpen = false;
-  // }
-
-  // private saveQrs() {
-  //   (this as any).storeQrs();
-  // }
+  get filteredAgentNodes(): ConsensusAgentNode[] {
+    return this.agentNodes.filter((node: ConsensusAgentNode) =>
+      (node.agentId.indexOf(this.filter) >= 0) ||
+      ((node.agentName ? node.agentName : node.agentAddress).indexOf(this.filter) >= 0));
+  }
 }
 </script>
