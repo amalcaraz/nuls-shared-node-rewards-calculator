@@ -1,1 +1,24 @@
-@import 'vendor/index';
+@import 'vendor/index'; 
+@import 'color'; 
+
+*, :after, :before {
+  box-sizing: border-box;
+}
+
+i.nuls {
+  display: inline-block;
+  height: 0.8em;
+  width: 0.5em;
+  background-image: url(./assets/logo_nuls.png);
+  background-size: contain;
+  background-position: center bottom;
+  background-repeat: no-repeat;
+
+  &.dark {
+    filter: grayscale(100%) contrast(160%) brightness(2);
+  }
+
+  &.light {
+    filter: grayscale(100%) contrast(160%) brightness(0);
+  }
+}

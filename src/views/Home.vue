@@ -1,18 +1,20 @@
 <template>
-  <div class="home">
-    <img src="../assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js + TypeScript App"/>
-  </div>
+  <AgentNodeCollection :agentNodes="allAgentNodes"></AgentNodeCollection>
 </template>
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
-import HelloWorld from '@/components/HelloWorld.vue'; // @ is an alias to /src
+import AgentNodeCollection from '@/components/AgentNodeCollection.vue';
+import { mapGetters } from 'vuex';
 
 @Component({
   components: {
-    HelloWorld,
+    AgentNodeCollection,
+  },
+  computed: {
+    ...mapGetters(['allAgentNodes']),
   },
 })
-export default class Home extends Vue {}
+export default class Home extends Vue {
+}
 </script>

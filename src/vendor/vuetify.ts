@@ -1,5 +1,21 @@
 import Vue from 'vue';
 import Vuetify from 'vuetify';
-// import 'vuetify/dist/vuetify.min.css';
+import colors from 'vuetify/es5/util/colors';
 
-Vue.use(Vuetify);
+export const customTheme = {
+  ...colors.teal,
+  base: '#8ab54d',
+  primary: '#8ab54d',
+  secondary: '#658ec7',
+};
+
+console.log(customTheme);
+
+Vue.use(Vuetify, {
+  theme: {
+    primary: customTheme.primary,
+    secondary: customTheme.secondary,
+    accent: colors.shades.black,
+    error: customTheme.accent3,
+  },
+});

@@ -5,5 +5,7 @@ app:
   api:
     nulsWorld:
       host: https://nuls.world
-      port: 80
+      port: 443
       base: ''
+      resources:
+        getNodes: /consensus.json
