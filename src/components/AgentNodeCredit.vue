@@ -51,7 +51,7 @@ export default class AgentNodeCredit extends Vue {
   text-align: center;
   white-space: nowrap;
   color: #fff;
-  background-color: #2c7be5;
+  background-color: var(--color-info);
   justify-content: center;
   border-radius: 200px;
   background-image: linear-gradient(
@@ -67,11 +67,11 @@ export default class AgentNodeCredit extends Vue {
   background-size: 1rem 1rem;
 
   &--full {
-    background-color: #00d97e !important;
+    background-color: var(--color-success) !important;
   }
 
   &--active {
-    background-color: #d99f00 !important;
+    background-color: var(--color-warning) !important;
   }
 }
 </style>
