@@ -1,18 +1,17 @@
 <template>
   <v-layout>
-    <spinner :loading="agentNodes.length == 0"></spinner>
-    <v-flex xs12 v-if="agentNodes.length > 0">    
-      <v-container grid-list-lg fluid>
-        <v-layout row v-if="agentNodes.length > 10">
-          <v-flex xs12>
-            <v-text-field
-              solo
-              label="Search"
-              append-icon="search"
-              v-model="filter"
-            ></v-text-field>
-          </v-flex>
-        </v-layout>
+    <v-flex xs12 v-if="agentNodes.length > 0">   
+      <v-layout row v-if="agentNodes.length > 10">
+        <v-flex xs12>
+          <v-text-field
+            solo
+            label="Search"
+            append-icon="search"
+            v-model="filter"
+          ></v-text-field>
+        </v-flex>
+      </v-layout> 
+      <v-container class="pa-0" grid-list-lg fluid>
         <v-layout row wrap>
           <v-flex xs12 sm6 lg4 v-for="node in filteredAgentNodes"
                     v-if="node"
@@ -46,3 +45,7 @@ export default class AgentNodeCollection extends Vue {
   }
 }
 </script>
+
+<style lang="scss" scoped>
+
+</style>

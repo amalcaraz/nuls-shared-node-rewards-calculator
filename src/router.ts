@@ -5,14 +5,14 @@ import store from './store';
 
 Vue.use(Router);
 
-export default new Router({
+const router = new Router({
   routes: [
     {
       path: '/',
       name: 'home',
       component: Home,
-      beforeEnter: (to, from, next) => {
-        store.dispatch('fetchAgentNodes');
+      beforeEnter: async (to, from, next) => {
+        await store.dispatch('consensus/fetchAgentNodes');
         next();
       },
     },
@@ -24,5 +24,16 @@ export default new Router({
     //   // which is lazy-loaded when the route is visited.
     //   component: () => import(/* webpackChunkName: "about" */ './views/About.vue'),
     // },
-  ], 
+  ],
 });
+
+router.beforeEach((to, form, next) => {
+  store.commit('layout/loading', true);
+  next();
+});
+
+router.afterEach((to, form) => {
+  store.commit('layout/loading', false);
+});
+
+export default router;

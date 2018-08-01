@@ -1,5 +1,8 @@
 <template>
-  <pulse-loader :loading="loading" :color="customTheme.primary" :size="size"></pulse-loader>
+  <pulse-loader :loading="loading" 
+                :color="customTheme.primary" 
+                :size="(size + 'px')"
+                :style="{width: (size*4) + 'px', margin: '0 auto'}"></pulse-loader>
 </template>
 
 <script lang="ts">
@@ -13,7 +16,7 @@ import pulseLoader from 'vue-spinner/src/PulseLoader.vue';
   },
 })
 export default class Spinner extends Vue {
-  @Prop({default: '25px'}) public size!: string;
+  @Prop({default: 25}) public size!: number;
   @Prop() public loading!: boolean ;
   public customTheme: any = customTheme;
 }

@@ -1,13 +1,13 @@
-import { ConsensusAgentNodeStatus, ConsensusAgentNode, agentNodeId } from './../model/consensus';
+import { ConsensusAgentNodeStatus, ConsensusAgentNodeCredit, ConsensusAgentNode, agentNodeId } from './../model/consensus';
 import Vue from 'vue';
 
 const nulsDecimals: number = 8;
 
-Vue.filter('agentNodeStatus', (value: ConsensusAgentNodeStatus) => {
+Vue.filter('agentNodeStatus', (value: ConsensusAgentNodeStatus, credit: number = 0) => {
 
   switch (value) {
     case ConsensusAgentNodeStatus.running:
-      return 'Online (stable)';
+      return 'Online' + (credit > ConsensusAgentNodeCredit.max ? ' (stable)' : '');
     case ConsensusAgentNodeStatus.waiting:
       return 'Waiting';
     default:

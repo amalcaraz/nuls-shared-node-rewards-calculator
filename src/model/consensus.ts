@@ -17,6 +17,12 @@ export enum ConsensusAgentNodeStatus {
   running = 1,
 }
 
+export enum ConsensusAgentNodeCredit {
+  min = 0,
+  med = 0.01,
+  max = 0.8,
+}
+
 export interface ConsensusAgentNode {
   agentHash: agentHash;
   agentAddress: address;

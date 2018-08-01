@@ -8,7 +8,7 @@
           <div class="grey--text">{{agentNode.commissionRate}}%</div>
         </v-flex>
         <v-flex xs6>
-          <div><agent-node-status :status="agentNode.status"></agent-node-status></div>
+          <div><agent-node-status :status="agentNode.status" :credit="agentNode.creditVal"></agent-node-status></div>
           <div class="grey--text"><v-icon color="grey" small>person</v-icon> {{agentNode.memberCount}}</div>
           <div class="grey--text"><v-icon color="grey" small>account_balance_wallet</v-icon> {{agentNode.deposit | nulsCurrency}}</div>
           <div class="grey--text"><v-icon color="grey" small>attach_money</v-icon> {{agentNode.totalDeposit | nulsCurrency}}</div>

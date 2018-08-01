@@ -3,6 +3,7 @@ import * as consensusService from '../../services/consensus';
 import { ConsensusAgentNodeListResponse, ConsensusAgentNode } from '@/model/consensus';
 
 export default {
+  namespaced: true,
   state: {
     agentNodes: new Array<ConsensusAgentNode>(),
   },

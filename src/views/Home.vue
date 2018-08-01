@@ -12,7 +12,7 @@ import { mapGetters } from 'vuex';
     AgentNodeCollection,
   },
   computed: {
-    ...mapGetters(['allAgentNodes']),
+    ...mapGetters('consensus', ['allAgentNodes']),
   },
 })
 export default class Home extends Vue {

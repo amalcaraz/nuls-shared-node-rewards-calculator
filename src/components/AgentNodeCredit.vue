@@ -2,23 +2,24 @@
   <div class="agent-node-credit">
     <span>{{credit}}</span>
     <span class="credit-wrap">
-      <span class="credit-bar" :class="creditStatusClass" :style="{width: `${50 + (50 * credit)}%`}"></span>
+      <span class="credit-bar" :class="creditClass" :style="{width: `${50 + (50 * credit)}%`}"></span>
     </span>
   </div>
 </template>
 
 <script lang="ts">
 import { Component, Vue, Prop } from 'vue-property-decorator';
+import { ConsensusAgentNodeCredit } from '../model/consensus';
 
 @Component({})
 export default class AgentNodeCredit extends Vue {
   @Prop() public credit!: number;
 
-  get creditStatusClass(): string {
-    if (this.credit > 0.8) {
-      return 'credit-bar--full';
-    } else if (this.credit > 0.5) {
-      return 'credit-bar--active';
+  get creditClass(): string {
+    if (this.credit > ConsensusAgentNodeCredit.max) {
+      return 'credit-bar--max';
+    } else if (this.credit > ConsensusAgentNodeCredit.med) {
+      return 'credit-bar--med';
     } else {
       return '';
     }
@@ -51,7 +52,7 @@ export default class AgentNodeCredit extends Vue {
   text-align: center;
   white-space: nowrap;
   color: #fff;
-  background-color: var(--color-info);
+  background-color: var(--color-grey);
   justify-content: center;
   border-radius: 200px;
   background-image: linear-gradient(
@@ -66,11 +67,11 @@ export default class AgentNodeCredit extends Vue {
   );
   background-size: 1rem 1rem;
 
-  &--full {
+  &--max {
     background-color: var(--color-success) !important;
   }
 
-  &--active {
+  &--med {
     background-color: var(--color-warning) !important;
   }
 }
