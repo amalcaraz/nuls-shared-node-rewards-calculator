@@ -50,7 +50,7 @@ import moment, { Moment } from 'moment';
     ...mapGetters('config', ['nodeConfig']),
     ...mapGetters('consensus', ['agentNodeByHash']),
     ...mapGetters('wallet', ['walletByAddress']),
-  },
+  }
 })
 export default class SelectNode extends Vue {
   public nodeRewards: NodeRewards = {} as any;
@@ -74,6 +74,7 @@ export default class SelectNode extends Vue {
 
   public created() {
     this.nodeRewards = this.getNodeRewards();
+    this.fetchNewBlocks();
   }
 
   public onStartDateChanged(startDate: string) {
@@ -81,6 +82,8 @@ export default class SelectNode extends Vue {
       startDate: moment(startDate).startOf('day'),
       endDate: this.nodeRewards.paymentDateRange.endDate,
     };
+
+    this.fetchNewBlocks();
 
     // this.$store.dispatch('config/changePaymentDateRange', {
     //   startDate,
@@ -91,8 +94,11 @@ export default class SelectNode extends Vue {
   public onEndDateChanged(endDate: string) {
     this.nodeRewards.paymentDateRange = {
       startDate: this.nodeRewards.paymentDateRange.startDate,
-      endDate: moment(endDate).startOf('day'),
+      endDate: moment(endDate).endOf('day'),
     };
+
+    this.fetchNewBlocks();
+
     // this.$store.dispatch('config/changePaymentDateRange', {
     //   startDate: this.nodeRewards.paymentDateRange.startDate,
     //   endDate,
@@ -100,12 +106,16 @@ export default class SelectNode extends Vue {
   }
 
   private getNodeRewards(): NodeRewards {
-
     const walletDetail: WalletDetail = this.currentWallet;
     const nodeConfig: ConfigNode = this.currentAgentNodeConfig;
 
-    const startDate: Moment = nodeConfig.lastPaymentDate ? moment(nodeConfig.lastPaymentDate).startOf('day') : moment().startOf('day');
-    const endDate: Moment = nodeConfig.paymentFreq ? startDate.clone().add(1, nodeConfig.paymentFreq) : startDate.clone().add(1, 'week');
+    const startDate: Moment = nodeConfig.lastPaymentDate
+      ? moment(nodeConfig.lastPaymentDate).startOf('day')
+      : moment().startOf('day');
+
+    const endDate: Moment = nodeConfig.paymentFreq
+      ? startDate.clone().add(1, nodeConfig.paymentFreq).endOf('day')
+      : startDate.clone().add(1, 'week').endOf('day');
 
     return {
       totalRewards: walletDetail.unspent_info.available_value,
@@ -114,8 +124,15 @@ export default class SelectNode extends Vue {
         endDate,
       },
     };
-
   }
 
+  private fetchNewBlocks() {
+    this.$store.dispatch('blocks/fetchBlocks', {
+      pagination: 0,
+      producer: this.currentAgentNode.packingAddress,
+      startDate: this.nodeRewards.paymentDateRange.startDate.valueOf(),
+      endDate: this.nodeRewards.paymentDateRange.endDate.valueOf(),
+    });
+  }
 }
 </script>
