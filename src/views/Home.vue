@@ -1,20 +1,54 @@
 <template>
-  <AgentNodeCollection :agentNodes="allAgentNodes"></AgentNodeCollection>
+  <div>
+    <v-card tile flat>
+      <v-card-text>
+        <v-layout wrap justify-space-around>
+          <div v-if="!userNodes || userNodes.length === 0">
+            <h4 class="headline">There is no nodes. <br/> Add the first one!</h4>
+          </div>
+          <agent-node-collection :agentNodes="userNodes"
+                                  @nodeSelected="onNodeSelected"></agent-node-collection>
+        </v-layout>
+      </v-card-text>
+      <v-card-actions>
+        <v-btn :to="{name: 'add-node'}" absolute dark fab bottom right color="secondary">
+          <v-icon>add</v-icon>
+        </v-btn>      
+      </v-card-actions>
+    </v-card>
+  </div>
 </template>
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
-import AgentNodeCollection from '@/components/AgentNodeCollection.vue';
 import { mapGetters } from 'vuex';
+import AgentNodeCollection from '@/components/AgentNodeCollection.vue';
+import { ConsensusAgentNode } from '@/model/consensus';
+import { ConfigNode } from '@/model/config';
 
 @Component({
   components: {
     AgentNodeCollection,
   },
   computed: {
+    ...mapGetters('config', ['allNodes']),
     ...mapGetters('consensus', ['allAgentNodes']),
   },
 })
 export default class Home extends Vue {
+  private allNodes!: ConfigNode[];
+  private allAgentNodes!: ConsensusAgentNode[];
+
+  get userNodes(): ConsensusAgentNode[] {
+    return this.allAgentNodes.filter((agentNode: ConsensusAgentNode) =>
+      this.allNodes.some(
+        (configNode: ConfigNode) => configNode.agentNodeId === agentNode.agentId,
+      ),
+    );
+  }
+
+  public onNodeSelected(node: ConsensusAgentNode) {
+    this.$router.push({ name: 'node-detail', params: { hash: node.agentHash } });
+  }
 }
 </script>

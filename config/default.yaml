@@ -4,8 +4,11 @@ app:
   localStoreKey: nulsSharedNodeRewardsCalculator
   api:
     nulsWorld:
-      host: https://nuls.world
-      port: 443
+      host: http://localhost
+      port: 8081
       base: ''
       resources:
         getNodes: /consensus.json
+        getNodeDetail: /consensus/node/__NODE_HASH__.json
+        getAddressDetail: /addresses/__ADDRESS__.json
+        getBlocks: /blocks.json

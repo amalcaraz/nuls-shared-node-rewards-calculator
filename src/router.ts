@@ -1,6 +1,8 @@
 import Vue from 'vue';
 import Router from 'vue-router';
 import Home from './views/Home.vue';
+import AddNode from './views/AddNode.vue';
+import NodeDetail from './views/NodeDetail.vue';
 import store from './store';
 
 Vue.use(Router);
@@ -13,6 +15,25 @@ const router = new Router({
       component: Home,
       beforeEnter: async (to, from, next) => {
         await store.dispatch('consensus/fetchAgentNodes');
+        next();
+      },
+    },
+    {
+      path: '/add-node',
+      name: 'add-node',
+      component: AddNode,
+      beforeEnter: async (to, from, next) => {
+        await store.dispatch('consensus/fetchAgentNodes');
+        next();
+      },
+    },
+    {
+      path: '/node-detail/:hash',
+      name: 'node-detail',
+      component: NodeDetail,
+      beforeEnter: async (to, from, next) => {
+        const nodeHash = to.params.hash;
+        await store.dispatch('consensus/fetchAgentNodeDetail', nodeHash);
         next();
       },
     },

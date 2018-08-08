@@ -2,7 +2,7 @@
   <v-app id="app">
     <v-toolbar app fixed dark color="primary" clipped-left>
       <v-btn icon>
-        <i class="nuls dark"></i>
+        <i id="nuls-logo" class="nuls dark"></i>
       </v-btn>
       <v-toolbar-title>
         Shared node rewards calculator
@@ -36,19 +36,24 @@ import { mapGetters } from 'vuex';
   },
 })
 export default class App extends Vue {
+
+  public created() {
+    this.$store.dispatch('config/retrieveConfig');
+  }
+
 }
 </script>
 
 <style lang="scss">
 @import "./styles/index.scss";
 #app {
-  .nuls {
-    width: 100%;
-    height: 100%;
-  }
-
   .loading-flex {
     align-self: center;
   }
+}
+
+#nuls-logo {
+  width: 100%;
+  height: 100%;
 }
 </style>

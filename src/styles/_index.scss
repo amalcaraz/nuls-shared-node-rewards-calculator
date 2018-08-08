@@ -5,6 +5,22 @@
   box-sizing: border-box;
 }
 
+h1, h2, h3, h4, h5, h6 {
+  margin: 0.5em 0 1em;
+}
+
+section {
+  margin-bottom: 2.5em;
+}
+
+.full-height > .flex {
+  display: flex;
+
+  > .v-card {
+    flex: 1 1 auto;
+  }
+}
+
 i.nuls {
   display: inline-block;
   height: 0.8em;
@@ -19,6 +35,6 @@ i.nuls {
   }
 
   &.light {
-    filter: grayscale(100%) contrast(160%) brightness(0);
+    filter: grayscale(100%) contrast(160%) brightness(0.6);
   }
 }

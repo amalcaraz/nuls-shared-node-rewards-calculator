@@ -16,7 +16,8 @@
           <v-flex xs12 sm6 lg4 v-for="node in filteredAgentNodes"
                     v-if="node"
                     :key="node.agentId">
-            <agent-node :agentNode="node"></agent-node>
+            <agent-node :agentNode="node"
+                        @click.native="onClick(node)"></agent-node>
           </v-flex>
         </v-layout>
       </v-container>
@@ -43,9 +44,9 @@ export default class AgentNodeCollection extends Vue {
       (node.agentId.indexOf(this.filter) >= 0) ||
       ((node.agentName ? node.agentName : node.agentAddress).indexOf(this.filter) >= 0));
   }
+
+  public onClick(node: ConsensusAgentNode) {
+    this.$emit('nodeSelected', node);
+  }
 }
 </script>
-
-<style lang="scss" scoped>
-
-</style>

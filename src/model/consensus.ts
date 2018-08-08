@@ -1,9 +1,7 @@
-export type agentNodeId = string;
-export type blockNumber = string;
-export type balanceNumber = number;
-export type txHash = string;
-export type agentHash = string;
-export type address = string;
+import { agentHash, address, balanceNumber, blockNumber, txHash, agentNodeId, hash } from './common';
+import { Block } from './blocks';
+
+export { agentHash } from './common';
 
 export interface ConsensusStat {
   _id: number;
@@ -43,7 +41,14 @@ export interface ConsensusAgentNode {
   memberCount: number;
 }
 
-export interface ConsensusAgentNodeListResponse {
+export interface ConsensusSummary {
+  lastHeight: blockNumber;
+  totalAgentNodes: number;
+  totalActiveAgentNodes: number;
+  totalDeposits: balanceNumber;
+}
+
+export interface ConsensusResponse {
   consensus: {
     _id: {
       $oid: string;
@@ -62,4 +67,107 @@ export interface ConsensusAgentNodeListResponse {
   stats_heights: blockNumber[];
   stats_stacked_values: number[];
   stats_active_nodes: number[];
+}
+
+
+
+
+
+// DETAIL
+
+export enum TransactionType {
+  transaction,
+  reward,
+}
+
+export interface BaseTransaction {
+  _id: {
+    $oid: string;
+  };
+  hash: hash;
+  type: TransactionType;
+  time: number;
+  blockHeight: blockNumber;
+  fee: balanceNumber;
+  remark: any;
+  scriptSig: string;
+  size: number;
+  info: {
+    deposit: balanceNumber;
+  };
+  inputs: Array<{
+    value: balanceNumber;
+    lockTime: number;
+    fromHash: hash;
+    fromIndex: number;
+    address: address;
+  }>;
+  outputs: Array<{
+    value: balanceNumber;
+    lockTime: number;
+    address: address;
+    status: number
+  }>;
+}
+
+export interface Transaction extends BaseTransaction {
+  info: {
+    deposit: balanceNumber;
+    agentAddress: address;
+    packingAddress: address;
+    rewardAddress: address;
+    commissionRate: number
+  };
+}
+
+export interface ConsensusTransaction extends BaseTransaction {
+  info: {
+    deposit: balanceNumber;
+    address: address;
+    agentHash: hash;
+  };
+  outputs: Array<{
+    value: balanceNumber;
+    lockTime: number;
+    address: address;
+    status: number;
+    addressHash: {
+      $binary: string;
+      $type: string;
+    };
+  }>;
+  is_complex: boolean;
+  display_type: string;
+  value: balanceNumber;
+  source: address;
+  target: any;
+}
+
+export interface AgentNodeDetail {
+  agent: ConsensusAgentNode;
+  transaction: Transaction;
+  block: Block;
+  consensus: {
+    _id: {
+      $oid: string;
+    },
+    height: blockNumber;
+    agents: ConsensusAgentNode[];
+    transactions: ConsensusTransaction[];
+    last_height: blockNumber;
+    tx_count: number;
+    mode: string; // "summary";
+    pagination_page: number;
+    pagination_total: number;
+    pagination_per_page: number;
+    pagination_item: string; // "transactions";
+    stats: Array<{
+      _id: number;
+      totalDeposit: balanceNumber;
+      deposit: balanceNumber;
+      activeNodes: number;
+    }>;
+    stats_heights: number[];
+    stats_stacked_values: number[]
+  };
 }

@@ -10,8 +10,8 @@
         <v-flex xs6>
           <div><agent-node-status :status="agentNode.status" :credit="agentNode.creditVal"></agent-node-status></div>
           <div class="grey--text"><v-icon color="grey" small>person</v-icon> {{agentNode.memberCount}}</div>
-          <div class="grey--text"><v-icon color="grey" small>account_balance_wallet</v-icon> {{agentNode.deposit | nulsCurrency}}</div>
-          <div class="grey--text"><v-icon color="grey" small>attach_money</v-icon> {{agentNode.totalDeposit | nulsCurrency}}</div>
+          <div class="grey--text"><v-icon color="grey" small>account_balance_wallet</v-icon> {{agentNode.deposit | nulsCurrency}} <i class="nuls light"></i></div>
+          <div class="grey--text"><v-icon color="grey" small>monetization_on</v-icon> {{agentNode.totalDeposit | nulsCurrency}} <i class="nuls light"></i></div>
         </v-flex>
       </v-layout>
       <v-layout>
@@ -25,7 +25,7 @@
 
 <script lang="ts">
 import { Component, Vue, Prop } from 'vue-property-decorator';
-import { ConsensusAgentNode } from '../model/consensus';
+import { ConsensusAgentNode } from '@/model/consensus';
 import AgentNodeStatus from '@/components/AgentNodeStatus.vue';
 import AgentNodeCredit from '@/components/AgentNodeCredit.vue';
 
@@ -36,13 +36,16 @@ import AgentNodeCredit from '@/components/AgentNodeCredit.vue';
   },
 })
 export default class AgentNode extends Vue {
-  @Prop() public agentNode!: ConsensusAgentNode;
+  @Prop() public agentNode: ConsensusAgentNode | undefined;
 }
 </script>
 
 <style lang="scss" scoped>
-.agent-node-name {
-  overflow: hidden;
-  text-overflow: ellipsis;
+.agent-node {
+  cursor: pointer;
+  &-name {
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
 }
 </style>
