@@ -12,3 +12,4 @@ app:
         getNodeDetail: /consensus/node/__NODE_HASH__.json
         getAddressDetail: /addresses/__ADDRESS__.json
         getBlocks: /blocks.json
+        getTransactions: /transactions.json

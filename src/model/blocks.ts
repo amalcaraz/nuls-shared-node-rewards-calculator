@@ -26,10 +26,10 @@ export interface Block {
 export interface BlockList {
   blocks: Block[];
   last_height: blockNumber;
-  pagination_page: number;
-  pagination_total: number;
-  pagination_per_page: number;
-  pagination_item: 'blocks';
+  pagination_page?: number;
+  pagination_total?: number;
+  pagination_per_page?: number;
+  pagination_item?: 'blocks';
 }
 
 export interface WalletRewards {

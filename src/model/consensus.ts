@@ -1,5 +1,6 @@
 import { agentHash, address, balanceNumber, blockNumber, txHash, agentNodeId, hash } from './common';
 import { Block } from './blocks';
+import { BaseTransaction, Transaction } from '@/model/transactions';
 
 export { agentHash } from './common';
 
@@ -70,55 +71,7 @@ export interface ConsensusResponse {
 }
 
 
-
-
-
 // DETAIL
-
-export enum TransactionType {
-  transaction,
-  reward,
-}
-
-export interface BaseTransaction {
-  _id: {
-    $oid: string;
-  };
-  hash: hash;
-  type: TransactionType;
-  time: number;
-  blockHeight: blockNumber;
-  fee: balanceNumber;
-  remark: any;
-  scriptSig: string;
-  size: number;
-  info: {
-    deposit: balanceNumber;
-  };
-  inputs: Array<{
-    value: balanceNumber;
-    lockTime: number;
-    fromHash: hash;
-    fromIndex: number;
-    address: address;
-  }>;
-  outputs: Array<{
-    value: balanceNumber;
-    lockTime: number;
-    address: address;
-    status: number
-  }>;
-}
-
-export interface Transaction extends BaseTransaction {
-  info: {
-    deposit: balanceNumber;
-    agentAddress: address;
-    packingAddress: address;
-    rewardAddress: address;
-    commissionRate: number
-  };
-}
 
 export interface ConsensusTransaction extends BaseTransaction {
   info: {

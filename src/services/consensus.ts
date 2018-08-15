@@ -1,6 +1,7 @@
 import config from 'config';
-import axios, { AxiosResponse } from 'axios';
-import { ConsensusResponse, agentHash, ConsensusAgentNode, ConsensusSummary } from '@/model/consensus';
+import axios from 'axios';
+import { checkResponse } from './utils';
+import { ConsensusResponse, agentHash, ConsensusAgentNode, ConsensusSummary } from '../model/consensus';
 
 
 const api = config.app.api.nulsWorld;
@@ -9,7 +10,7 @@ const baseUrl: string = `${api.host}:${api.port}${api.base}`;
 export async function getConsensusSummary(): Promise<ConsensusSummary> {
 
   const url: string = `${baseUrl}${api.resources.getNodes}`;
-  const response: ConsensusResponse = await axios.get<ConsensusResponse>(url).then(_checkResponse);
+  const response: ConsensusResponse = await axios.get<ConsensusResponse>(url).then(checkResponse);
 
   return {
     lastHeight: response.last_height,
@@ -23,7 +24,7 @@ export async function getConsensusSummary(): Promise<ConsensusSummary> {
 export async function getConsensusNodeList(): Promise<ConsensusAgentNode[]> {
 
   const url: string = `${baseUrl}${api.resources.getNodes}`;
-  return (await axios.get<ConsensusResponse>(url).then(_checkResponse)).consensus.agents;
+  return (await axios.get<ConsensusResponse>(url).then(checkResponse)).consensus.agents;
 
 }
 
@@ -35,12 +36,4 @@ export async function getConsensusNodeDetail(nodeHash: agentHash): Promise<Conse
   // const url: string = `${baseUrl}${api.resources.getNodeDetail}`.replace(/__NODE_HASH__/, nodeHash);
   // return await axios.get<ConsensusResponse>(url).then(_checkResponse);
 
-}
-
-function _checkResponse<T>(response: AxiosResponse<T>): T {
-  if (response.status >= 200 && response.status < 300) {
-    return response.data;
-  } else {
-    throw new Error(response.statusText);
-  }
 }
