@@ -13,6 +13,21 @@ export enum TransactionType {
   Unregister = 9, // unregister consensus node
 }
 
+export interface TransactionInput {
+  value: balanceNumber;
+  lockTime: number;
+  fromHash: hash;
+  fromIndex: number;
+  address: address;
+}
+
+export interface TransactionOutput {
+  value: balanceNumber;
+  lockTime: number;
+  address: address;
+  status: number;
+}
+
 export interface BaseTransaction {
   _id: {
     $oid: string;
@@ -28,19 +43,8 @@ export interface BaseTransaction {
   info: {
     deposit?: balanceNumber;
   };
-  inputs: Array<{
-    value: balanceNumber;
-    lockTime: number;
-    fromHash: hash;
-    fromIndex: number;
-    address: address;
-  }>;
-  outputs: Array<{
-    value: balanceNumber;
-    lockTime: number;
-    address: address;
-    status: number
-  }>;
+  inputs: TransactionInput[];
+  outputs: TransactionOutput[];
 }
 
 export interface Transaction extends BaseTransaction {

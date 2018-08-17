@@ -6,6 +6,8 @@ import error from './modules/error';
 import consensus from './modules/consensus';
 import wallet from './modules/wallet';
 import blocks from './modules/blocks';
+import transactions from './modules/transactions';
+import rewards from './modules/rewards';
 
 Vue.use(Vuex);
 
@@ -17,6 +19,8 @@ const store = new Vuex.Store({
     consensus,
     wallet,
     blocks,
+    transactions,
+    rewards,
   },
 });
 

@@ -7,4 +7,5 @@ export interface NodeRewards {
     endDate: Moment;
   };
   totalRewards: balanceNumber;
+  totalRewards2: balanceNumber;
 }

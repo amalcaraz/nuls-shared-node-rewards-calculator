@@ -59,7 +59,8 @@
           <strong>Total rewards:</strong>
         </v-flex>
         <v-flex xs6>
-          <div class="grey--text">{{nodeRewards.totalRewards | nulsCurrency}} <i class="nuls light"></i></div>          
+          <div class="grey--text">{{nodeRewards.totalRewards | nulsCurrency}} <i class="nuls light"></i></div>
+          <div class="red--text">{{nodeRewards.totalRewards2 | nulsCurrency}} <i class="nuls light"></i></div>          
           <div>{{nodeRewards.nodes}}</div>
         </v-flex>
       </v-layout>
