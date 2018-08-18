@@ -1,6 +1,6 @@
 export type hash = string;
 export type agentNodeId = string;
-export type blockNumber = number;
+export type blockHeight = number;
 export type balanceNumber = number;
 export type txHash = hash;
 export type agentHash = hash;

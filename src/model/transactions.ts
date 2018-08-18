@@ -1,4 +1,4 @@
-import { address, balanceNumber, hash, blockNumber, transactionHash } from './common';
+import { address, balanceNumber, hash, blockHeight, transactionHash } from './common';
 
 
 export enum TransactionType {
@@ -13,6 +13,13 @@ export enum TransactionType {
   Unregister = 9, // unregister consensus node
 }
 
+export enum TransactionStatus {
+  UnspentFree = 0,
+  UnspentLocked = 1,
+  Unspent = 2,
+  Spent = 3,
+}
+
 export interface TransactionInput {
   value: balanceNumber;
   lockTime: number;
@@ -25,7 +32,7 @@ export interface TransactionOutput {
   value: balanceNumber;
   lockTime: number;
   address: address;
-  status: number;
+  status: TransactionStatus;
 }
 
 export interface BaseTransaction {
@@ -35,7 +42,7 @@ export interface BaseTransaction {
   hash: transactionHash;
   type: TransactionType;
   time: number;
-  blockHeight: blockNumber;
+  blockHeight: blockHeight;
   fee: balanceNumber;
   remark: any;
   scriptSig: string;
@@ -59,7 +66,7 @@ export interface Transaction extends BaseTransaction {
 
 export interface TransactionList {
   transactions: Transaction[];
-  last_height: blockNumber;
+  last_height: blockHeight;
   pagination_page?: number;
   pagination_total?: number;
   pagination_per_page?: number;
@@ -71,6 +78,7 @@ export interface TransactionsFilters {
   address?: address;
   from?: address;
   to?: address;
+  maskByAddress?: address;
   pagination?: number;
   startDate?: number;
   endDate?: number;

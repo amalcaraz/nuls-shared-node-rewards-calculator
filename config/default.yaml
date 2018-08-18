@@ -2,6 +2,7 @@ app:
   env: dev
   metaBase: /
   localStoreKey: nulsSharedNodeRewardsCalculator
+  stakingRewardsBlocksAverage: 200
   api:
     nulsWorld:
       host: http://localhost
@@ -10,6 +11,7 @@ app:
       resources:
         getNodes: /consensus.json
         getNodeDetail: /consensus/node/__NODE_HASH__.json
+        getConsensusList: /consensus/list.json
         getAddressDetail: /addresses/__ADDRESS__.json
         getBlocks: /blocks.json
         getTransactions: /transactions.json

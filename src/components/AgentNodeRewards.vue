@@ -56,13 +56,16 @@
       </v-layout>
       <v-layout>
         <v-flex>
-          <strong>Total rewards:</strong>
+          <div>Node balance:</div>
+          <div>Total rewards:</div>
+          <div>Owner staking rewards:</div>
         </v-flex>
-        <v-flex xs6>
-          <div class="grey--text">{{nodeRewards.totalRewards | nulsCurrency}} <i class="nuls light"></i></div>
-          <div class="red--text">{{nodeRewards.totalRewards2 | nulsCurrency}} <i class="nuls light"></i></div>          
-          <div>{{nodeRewards.nodes}}</div>
+        <v-flex>
+          <div class="grey--text">{{nodeRewards.nodeBalance | nulsCurrency}} <i class="nuls light"></i></div>
+          <div class="green--text">{{nodeRewards.totalRewards | nulsCurrency}} <i class="nuls light"></i></div>
+          <div class="blue--text">{{nodeRewards.stakingRewards | nulsCurrency}} <i class="nuls light"></i></div>
         </v-flex>
+        <v-spacer></v-spacer>
       </v-layout>
     </v-card-text>
   </v-card>

@@ -1,9 +1,9 @@
-import { address, balanceNumber, blockNumber } from './common';
+import { address, balanceNumber, blockHeight } from './common';
 import { ConsensusTransaction } from './consensus';
 
 export interface WalletDetail {
   address: address;
-  last_height: blockNumber;
+  last_height: blockHeight;
   mode: string;
   pagination_item: string;
   pagination_page: number;

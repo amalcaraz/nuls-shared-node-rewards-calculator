@@ -1,8 +1,17 @@
-import { agentHash, address, balanceNumber, blockNumber, txHash, agentNodeId, hash } from './common';
+import { agentHash, address, balanceNumber, blockHeight, txHash, agentNodeId, hash } from './common';
 import { Block } from './blocks';
 import { BaseTransaction, Transaction } from '@/model/transactions';
 
 export { agentHash } from './common';
+
+export interface ConsensusListFilters {
+  [k: string]: any;
+  pagination?: number;
+  heights?: string; // 'address,address,address'
+  startHeight?: blockHeight;
+  endHeight?: blockHeight;
+  agent?: agentHash;
+}
 
 export interface ConsensusStat {
   _id: number;
@@ -33,7 +42,7 @@ export interface ConsensusAgentNode {
   agentId: agentNodeId;
   introduction: any;
   time: number;
-  blockHeight: blockNumber;
+  blockHeight: blockHeight;
   delHeight: number;
   status: ConsensusAgentNodeStatus;
   creditVal: number;
@@ -43,7 +52,7 @@ export interface ConsensusAgentNode {
 }
 
 export interface ConsensusSummary {
-  lastHeight: blockNumber;
+  lastHeight: blockHeight;
   totalAgentNodes: number;
   totalActiveAgentNodes: number;
   totalDeposits: balanceNumber;
@@ -54,10 +63,10 @@ export interface ConsensusResponse {
     _id: {
       $oid: string;
     };
-    height: blockNumber;
+    height: blockHeight;
     agents: ConsensusAgentNode[];
   };
-  last_height: blockNumber;
+  last_height: blockHeight;
   total_all: { [address: string]: number };
   total_hour: { [address: string]: number };
   total_day: { [address: string]: number };
@@ -65,9 +74,13 @@ export interface ConsensusResponse {
   active_count: number;
   total_deposit: number;
   stats: ConsensusStat[];
-  stats_heights: blockNumber[];
+  stats_heights: blockHeight[];
   stats_stacked_values: number[];
   stats_active_nodes: number[];
+}
+
+export interface ConsensusListResponse {
+  consensus_list: ConsensusResponse[];
 }
 
 
@@ -104,10 +117,10 @@ export interface AgentNodeDetail {
     _id: {
       $oid: string;
     },
-    height: blockNumber;
+    height: blockHeight;
     agents: ConsensusAgentNode[];
     transactions: ConsensusTransaction[];
-    last_height: blockNumber;
+    last_height: blockHeight;
     tx_count: number;
     mode: string; // "summary";
     pagination_page: number;

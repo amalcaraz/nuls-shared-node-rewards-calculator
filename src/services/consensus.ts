@@ -1,7 +1,7 @@
 import config from 'config';
 import axios from 'axios';
-import { checkResponse } from './utils';
-import { ConsensusResponse, agentHash, ConsensusAgentNode, ConsensusSummary } from '../model/consensus';
+import { checkResponse, getQueryString } from './utils';
+import { ConsensusResponse, agentHash, ConsensusAgentNode, ConsensusSummary, ConsensusListFilters, ConsensusListResponse } from '../model/consensus';
 
 
 const api = config.app.api.nulsWorld;
@@ -18,6 +18,15 @@ export async function getConsensusSummary(): Promise<ConsensusSummary> {
     totalActiveAgentNodes: response.active_count,
     totalDeposits: response.total_deposit,
   };
+
+}
+
+export async function getConsensusList(filters: ConsensusListFilters = {}): Promise<ConsensusResponse[]> {
+
+  const queryString: string = getQueryString(filters);
+
+  const url: string = `${baseUrl}${api.resources.getConsensusList}${queryString}`;
+  return (await axios.get<ConsensusListResponse>(url).then(checkResponse)).consensus_list;
 
 }
 

@@ -38,7 +38,7 @@ function filterTransactionsByDateRange(txs: Transaction[], startDate: number = 0
 
 function filterTransactionsByFilters(txs: Transaction[], filters: TransactionsFilters) {
 
-  let filteredTxs: Transaction[] = txs.slice(0);
+  let filteredTxs: Transaction[] = txs; // txs.slice(0);
 
   if (filters.address) {
     filteredTxs = filterTransactionsByAddress(filteredTxs, filters.address);
@@ -86,11 +86,14 @@ export default {
     },
     addTransactions(state: any, txs: Transaction | Transaction[]) {
 
-      const newTransactions = []
-        .concat.call([], txs)
-        .filter((newTx: Transaction) => !state.txs.some((storedTx: Transaction) => storedTx.hash === newTx.hash));
+      // const newTransactions = []
+      //   .concat.call([], txs)
+      //   .filter((newTx: Transaction) => !state.txs.some((storedTx: Transaction) => storedTx.hash === newTx.hash));
 
-      state.txs = [...state.txs, ...newTransactions];
+      // state.txs = [...state.txs, ...newTransactions];
+
+      const newTransactions = [].concat.call([], txs);
+      state.txs = [...newTransactions];
 
     },
   },

@@ -1,4 +1,4 @@
-import { address, balanceNumber, blockNumber, hash, blockHash } from './common';
+import { address, balanceNumber, blockHeight, hash, blockHash } from './common';
 
 export interface Block {
   _id: {
@@ -8,7 +8,7 @@ export interface Block {
   preHash: hash;
   merkleHash: hash;
   time: number;
-  height: blockNumber;
+  height: blockHeight;
   txCount: number;
   packingAddress: address;
   roundIndex: number;
@@ -25,7 +25,7 @@ export interface Block {
 
 export interface BlockList {
   blocks: Block[];
-  last_height: blockNumber;
+  last_height: blockHeight;
   pagination_page?: number;
   pagination_total?: number;
   pagination_per_page?: number;
