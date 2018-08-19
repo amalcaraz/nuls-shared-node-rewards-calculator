@@ -1,4 +1,4 @@
-import { address, balanceNumber, hash, blockHeight, transactionHash } from './common';
+import { address, balanceNumber, hash, blockHeight, transactionHash, txHash, agentHash } from './common';
 
 
 export enum TransactionType {
@@ -47,9 +47,7 @@ export interface BaseTransaction {
   remark: any;
   scriptSig: string;
   size: number;
-  info: {
-    deposit?: balanceNumber;
-  };
+  info?: {};
   inputs: TransactionInput[];
   outputs: TransactionOutput[];
 }
@@ -61,6 +59,49 @@ export interface Transaction extends BaseTransaction {
     packingAddress?: address;
     rewardAddress?: address;
     commissionRate?: number
+  };
+}
+
+export interface AliasedTransaction extends BaseTransaction {
+  info: {
+    address: {
+      $binary: string;
+      $type: number;
+    };
+    alias: string;
+  };
+}
+
+export interface RegisterTransaction extends BaseTransaction {
+  info: {
+    deposit: balanceNumber;
+    agentAddress: address;
+    packingAddress: address;
+    rewardAddress: address;
+    commissionRate: number;
+  };
+}
+
+export interface DepositTransaction extends BaseTransaction {
+  info: {
+    deposit: balanceNumber;
+    address: address;
+    agentHash: agentHash;
+  };
+}
+
+export interface WithdrawTransaction extends BaseTransaction {
+  info: {
+    joinTxHash: txHash;
+    address: address;
+    agentHash: agentHash;
+  };
+}
+
+export interface RedYellowCardTransaction extends BaseTransaction {
+  info: {
+    count: number,
+    addresses: address[];
   };
 }
 

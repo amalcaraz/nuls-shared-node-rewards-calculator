@@ -18,6 +18,7 @@
             <agent-node-rewards :nodeRewards="currentNodeRewards"
                                 @startDateChanged="onStartDateChanged"
                                 @endDateChanged="onEndDateChanged"
+                                @serverCostsChanged="onServerCostsChanged"
             ></agent-node-rewards>
           </v-flex>
         </v-layout>
@@ -30,11 +31,11 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue } from 'vue-property-decorator';
+import { Component, Vue, Watch } from 'vue-property-decorator';
 import { ConsensusAgentNode, ConsensusSummary } from '../model/consensus';
 import { TransactionsFilters, TransactionType } from '../model/transactions';
 import { WalletDetail } from '@/model/wallet';
-import { ConfigNode } from '@/model/config';
+import { ConfigNode, ConfigServerCosts } from '@/model/config';
 import AgentNode from '@/components/AgentNode.vue';
 import AgentNodeRewards from '@/components/AgentNodeRewards.vue';
 import * as walletService from '../services/wallet';
@@ -42,6 +43,9 @@ import { NodeRewards, NodeRewardsFilters } from '@/model/rewards';
 import { Transaction } from '@/model/transactions';
 import moment, { Moment } from 'moment';
 import { BlocksFilters } from '@/model/blocks';
+import { balanceNumber } from '@/model/common';
+import { ServerCostsPrice } from '@/model/price';
+import { setTimeout } from 'timers';
 
 @Component({
   components: {
@@ -50,25 +54,14 @@ import { BlocksFilters } from '@/model/blocks';
   },
 })
 export default class SelectNode extends Vue {
-  // public nodeRewards: NodeRewards = {} as any;
+
   public startDate: Moment | null = null;
   public endDate: Moment | null = null;
+  // public currentNodeRewards!: NodeRewards;
 
   get currentAgentNode(): ConsensusAgentNode {
     return this.$store.getters['consensus/agentNodeByHash'](
       this.$route.params.hash,
-    );
-  }
-
-  get currentAgentNodeConfig(): ConfigNode {
-    return this.$store.getters['config/nodeConfig'](
-      this.currentAgentNode.agentId,
-    );
-  }
-
-  get currentWallet(): WalletDetail {
-    return this.$store.getters['wallet/walletByAddress'](
-      this.currentAgentNode.rewardAddress,
     );
   }
 
@@ -79,47 +72,62 @@ export default class SelectNode extends Vue {
     };
   }
 
-  get currentAgentNodeRewardsByDateRange(): number {
-    return this.$store.getters['rewards/agentNodeRewardsByDateRange'](
-      this.currentAgentNode,
-      this.currentDateRange.startDate.valueOf(),
-      this.currentDateRange.endDate.valueOf(),
-    );
-  }
-
-  get currentNodeStakingRewardsByDateRange(): number {
-    return this.$store.getters['rewards/nodeStakingRewardsByDateRange'](
-      this.currentAgentNode,
-      this.currentDateRange.startDate.valueOf(),
-      this.currentDateRange.endDate.valueOf(),
-    );
-  }
-
   get currentNodeRewards(): NodeRewards {
-    const walletDetail: WalletDetail = this.currentWallet;
     const dateRange = this.currentDateRange;
-    const nodeRewards = this.currentAgentNodeRewardsByDateRange;
-    const nodeStakingRewards = this.currentNodeStakingRewardsByDateRange;
+
+    const walletDetail: WalletDetail = this.$store.getters['wallet/walletByAddress'](
+      this.currentAgentNode.rewardAddress,
+    );
+
+    const nodeRewards: balanceNumber = this.$store.getters['rewards/agentNodeRewardsByDateRange'](
+      this.currentAgentNode,
+      this.currentDateRange.startDate.valueOf(),
+      this.currentDateRange.endDate.valueOf(),
+    );
+
+    const nodeStakingRewards: balanceNumber = this.$store.getters['rewards/nodeStakingRewardsByDateRange'](
+      this.currentAgentNode,
+      this.currentDateRange.startDate.valueOf(),
+      this.currentDateRange.endDate.valueOf(),
+    );
+
+    const serverCostsPrice: ServerCostsPrice = this.$store.getters['rewards/nodeServerCosts'](
+      this.currentAgentNode,
+    );
+
+    console.log('ry');
 
     return {
       nodeBalance: walletDetail.unspent_info.available_value,
       totalRewards: nodeRewards,
       stakingRewards: nodeStakingRewards,
       paymentDateRange: dateRange,
+      serverCosts: serverCostsPrice,
+      totalToShare: (nodeRewards - nodeStakingRewards - serverCostsPrice.nulsPrice),
     };
   }
 
-  public created() {
-    this.initDateRange();
+  public async created() {
+    this.initNodeConfig();
     this.fetchRewards();
+    this.fetchServerCosts();
   }
 
-  public onStartDateChanged(startDate: string) {
+  public onServerCostsChanged(price: ServerCostsPrice) {
+    const serverCosts: ConfigServerCosts = {
+      currency: price.currency,
+      price: price.price,
+    };
+    this.$store.dispatch('config/updateServerCosts', { id: this.currentAgentNode.agentId , serverCosts });
+    this.fetchServerCosts();
+  }
+
+  public async onStartDateChanged(startDate: string) {
     this.startDate = moment(startDate)
       .clone()
       .startOf('day');
 
-    this.fetchRewards();
+    setTimeout(() => this.fetchRewards(), 500);
 
     // this.$store.dispatch('config/changePaymentDateRange', {
     //   startDate,
@@ -127,12 +135,12 @@ export default class SelectNode extends Vue {
     // });
   }
 
-  public onEndDateChanged(endDate: string) {
+  public async onEndDateChanged(endDate: string) {
     this.endDate = moment(endDate)
       .clone()
       .endOf('day');
 
-    this.fetchRewards();
+    setTimeout(() => this.fetchRewards(), 500);
 
     // this.$store.dispatch('config/changePaymentDateRange', {
     //   startDate: this.nodeRewards.paymentDateRange.startDate,
@@ -140,8 +148,10 @@ export default class SelectNode extends Vue {
     // });
   }
 
-  private initDateRange() {
-    const nodeConfig: ConfigNode = this.currentAgentNodeConfig;
+  private initNodeConfig() {
+    const nodeConfig: ConfigNode = this.$store.getters['config/nodeConfig'](
+      this.currentAgentNode.agentId,
+    );
 
     this.startDate = nodeConfig.lastPaymentDate
       ? moment(nodeConfig.lastPaymentDate).startOf('day')
@@ -152,17 +162,24 @@ export default class SelectNode extends Vue {
       : this.startDate.clone().add(1, 'week').endOf('day');
   }
 
+  private fetchServerCosts() {
+    this.$store.dispatch('rewards/fetchNodeServerCosts', {
+      node: this.currentAgentNode,
+    });
+  }
+
   private fetchRewards() {
+
     this.$store.dispatch('rewards/fetchNodeRewards', {
       node: this.currentAgentNode,
-      startDate: this.currentNodeRewards.paymentDateRange.startDate.valueOf(),
-      endDate: this.currentNodeRewards.paymentDateRange.endDate.valueOf(),
+      startDate: this.currentDateRange.startDate.valueOf(),
+      endDate: this.currentDateRange.endDate.valueOf(),
     });
 
     this.$store.dispatch('rewards/fetchNodeStakingRewards', {
       node: this.currentAgentNode,
-      startDate: this.currentNodeRewards.paymentDateRange.startDate.valueOf(),
-      endDate: this.currentNodeRewards.paymentDateRange.endDate.valueOf(),
+      startDate: this.currentDateRange.startDate.valueOf(),
+      endDate: this.currentDateRange.endDate.valueOf(),
     });
   }
 }

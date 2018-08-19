@@ -15,3 +15,9 @@ app:
         getAddressDetail: /addresses/__ADDRESS__.json
         getBlocks: /blocks.json
         getTransactions: /transactions.json
+    coinmarketcap:
+      host: https://api.coinmarketcap.com
+      port: '' 
+      base: /v2
+      resources:
+        getNulsPrice: /ticker/2092/?convert=EUR

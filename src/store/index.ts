@@ -8,6 +8,7 @@ import wallet from './modules/wallet';
 import blocks from './modules/blocks';
 import transactions from './modules/transactions';
 import rewards from './modules/rewards';
+import price from './modules/price';
 
 Vue.use(Vuex);
 
@@ -21,6 +22,7 @@ const store = new Vuex.Store({
     blocks,
     transactions,
     rewards,
+    price,
   },
 });
 

@@ -3,11 +3,22 @@ import { agentNodeId } from './common';
 
 export interface ConfigNode {
   agentNodeId: agentNodeId;
-  serverCost: number;
-  paymentFreq: DurationInputArg2; // 'month' | 'week' | 'day';
-  lastPaymentDate: string;
+  serverCosts?: ConfigServerCosts;
+  paymentFreq?: DurationInputArg2; // 'month' | 'week' | 'day';
+  lastPaymentDate?: string;
 }
 
 export interface Config {
-  nodes: ConfigNode[];
+  nodes?: ConfigNode[];
+}
+
+export enum ConfigCurrencyType {
+  USD = 'USD',
+  EUR = 'EUR',
+  NULS = 'NULS',
+}
+
+export interface ConfigServerCosts {
+  currency: ConfigCurrencyType;
+  price: number;
 }

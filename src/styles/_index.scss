@@ -38,3 +38,20 @@ i.nuls {
     filter: grayscale(100%) contrast(160%) brightness(0.6);
   }
 }
+
+.editable:hover {
+  position: relative;
+  cursor: pointer;
+
+  &:after {
+    font-family: 'Material Icons';
+    line-height: 1em;
+    content: 'edit';
+    position: absolute;
+    left: 110%;
+    top: 50%;
+    margin-top: -.5em;
+    height: 1em;
+    width: 1em;
+  }
+}

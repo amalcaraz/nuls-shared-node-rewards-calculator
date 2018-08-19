@@ -1,3 +1,4 @@
+import { NulsPriceResponse } from './../../model/price';
 import { balanceNumber } from '../../model/common';
 import { ConsensusResponse } from './../../model/consensus';
 import { ConsensusAgentNode, ConsensusListFilters } from '@/model/consensus';
@@ -5,6 +6,11 @@ import { TransactionsFilters, TransactionType, Transaction, TransactionOutput } 
 import { NodeRewardsFilters, StakingRewardsFilters } from '@/model/rewards';
 import { BlocksFilters, Block } from '@/model/blocks';
 import { calculateStakingRewardsPerRound } from '@/services/rewards';
+import { calculateNulsPrice } from '@/services/price';
+import { ConfigServerCosts } from '@/model/config';
+import { ServerCostsPrice } from '../../model/price';
+import config from 'config';
+
 
 export default {
   namespaced: true,
@@ -63,6 +69,22 @@ export default {
         return node.deposit * perRoundRewardsAverage * blocks.length * nodeCommission;
 
       },
+
+    nodeServerCosts: (state: any, getters: any, rootState: any, rootGetters: any) =>
+      (node: ConsensusAgentNode, startDate: number, endDate: number): ServerCostsPrice => {
+
+        const price: NulsPriceResponse = rootGetters['price/price'];
+
+        const confiServerCosts: ConfigServerCosts = rootGetters['config/serverCosts'](
+          node.agentId,
+        );
+
+        return {
+          ...confiServerCosts,
+          nulsPrice: confiServerCosts && price ? calculateNulsPrice(confiServerCosts.price, confiServerCosts.currency, price) : 0,
+        };
+
+      },
   },
   actions: {
     async fetchNodeRewards({ dispatch }: any, filters: NodeRewardsFilters) {
@@ -76,7 +98,7 @@ export default {
         endDate: filters.endDate,
       };
 
-      dispatch('transactions/fetchTransactions', transactionsFilters, { root: true });
+      await dispatch('transactions/fetchTransactions', transactionsFilters, { root: true });
 
     },
     async fetchNodeStakingRewards({ dispatch, rootGetters }: any, filters: StakingRewardsFilters) {
@@ -95,17 +117,20 @@ export default {
       if (blocks.length > 0) {
 
         const consensusListFilters: ConsensusListFilters = {
-          pagination: 0,
+          pagination: config.app.stakingRewardsBlocksAverage,
           agent: filters.node.agentHash,
-          // heights: blocks.slice(0, blocks.length - 1).map((block: Block) => block.height).join(','),
-          startHeight: blocks[blocks.length - 1].height,
-          endHeight: blocks[0].height,
+          heights: blocks.slice(0, config.app.stakingRewardsBlocksAverage).map((block: Block) => block.height).join(','),
+          // startHeight: blocks[blocks.length - 1].height,
+          // endHeight: blocks[0].height,
         };
 
-        dispatch('consensus/fetchConsensusList', consensusListFilters, { root: true });
+        await dispatch('consensus/fetchConsensusList', consensusListFilters, { root: true });
 
       }
 
+    },
+    async fetchNodeServerCosts({ dispatch, rootGetters }: any, node: ConsensusAgentNode) {
+      await dispatch('price/fetchPrice', undefined, { root: true });
     },
   },
 };

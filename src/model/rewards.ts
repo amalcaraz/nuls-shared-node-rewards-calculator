@@ -1,6 +1,7 @@
 import { balanceNumber } from './common';
 import { Moment } from 'moment';
 import { ConsensusAgentNode } from '@/model/consensus';
+import { ConfigServerCosts } from './config';
 
 export interface NodeRewardsFilters {
   [k: string]: any;
@@ -21,4 +22,6 @@ export interface NodeRewards {
   nodeBalance: balanceNumber;
   totalRewards: balanceNumber;
   stakingRewards: balanceNumber;
+  serverCosts: ConfigServerCosts;
+  totalToShare: balanceNumber;
 }
