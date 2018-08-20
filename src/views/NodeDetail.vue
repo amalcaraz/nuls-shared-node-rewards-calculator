@@ -27,6 +27,7 @@
     <section>
       <h2 class="title">Stakers</h2>
       <agent-node-stakers :nodeStakers="currentNodeStakers"
+                          :nodeRewards="currentNodeRewards"
                           @newStaker="onNewStaker"
                           @updateStaker="onUpdateStaker"
                           @deleteStaker="onDeleteStaker"                          
