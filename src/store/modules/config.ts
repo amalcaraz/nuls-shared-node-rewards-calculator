@@ -1,7 +1,8 @@
 import config from 'config';
 import { ConfigNode, Config } from '@/model/config';
 import { agentNodeId } from '@/model/common';
-import { ConfigServerCosts } from '../../model/config';
+import { ConfigStaker, ConfigServerCosts } from '../../model/config';
+import Vue from 'vue';
 
 
 function findNodeConfigById(nodes: ConfigNode[], id: agentNodeId): ConfigNode | undefined {
@@ -15,6 +16,13 @@ function findNodeServerCostsById(nodes: ConfigNode[], id: agentNodeId): ConfigSe
     : undefined;
 }
 
+function findNodeStakersById(nodes: ConfigNode[], id: agentNodeId): ConfigStaker[] {
+  const node: ConfigNode | undefined = findNodeConfigById(nodes, id);
+  return node
+    ? node.stakers
+    : [];
+}
+
 export default {
   namespaced: true,
   state: {
@@ -25,6 +33,7 @@ export default {
   getters: {
     allNodes: (state: any) => state.config.nodes,
     serverCosts: (state: any) => (id: agentNodeId) => findNodeServerCostsById(state.config.nodes, id),
+    stakers: (state: any) => (id: agentNodeId) => findNodeStakersById(state.config.nodes, id),
     nodeConfig: (state: any) => (id: agentNodeId) => findNodeConfigById(state.config.nodes, id),
   },
   mutations: {
@@ -41,6 +50,29 @@ export default {
 
       state.config.nodes = [...state.config.nodes, ...newAgentNodes];
     },
+    addStaker(state: any, { id, staker }: { id: agentNodeId, staker: ConfigStaker }) {
+      const node: ConfigNode | undefined = findNodeConfigById(state.config.nodes, id);
+      if (node) {
+        if (!Array.isArray(node.stakers)) {
+          node.stakers = [];
+        }
+        node.stakers.push(staker);
+      }
+    },
+    updateStaker(state: any, { id, staker }: { id: agentNodeId, staker: ConfigStaker }) {
+      const node: ConfigNode | undefined = findNodeConfigById(state.config.nodes, id);
+      if (node) {
+        const index: number = node.stakers.findIndex((storedStaker: ConfigStaker) => storedStaker.address === staker.address);
+        Vue.set(node.stakers, index, staker);
+      }
+    },
+    deleteStaker(state: any, { id, staker }: { id: agentNodeId, staker: ConfigStaker }) {
+      const node: ConfigNode | undefined = findNodeConfigById(state.config.nodes, id);
+      if (node) {
+        const index: number = node.stakers.indexOf(staker);
+        node.stakers.splice(index, 1);
+      }
+    },
     loadState(state: any, newConfig: any) {
       state.config = { ...newConfig };
     },
@@ -52,6 +84,18 @@ export default {
     },
     updateServerCosts({ commit, dispatch }: any, payload: { id: agentNodeId, serverCosts: ConfigServerCosts }) {
       commit('updateServerCosts', payload);
+      dispatch('storeConfig');
+    },
+    addStaker({ commit, dispatch }: any, payload: { id: agentNodeId, staker: ConfigStaker }) {
+      commit('addStaker', payload);
+      dispatch('storeConfig');
+    },
+    updateStaker({ commit, dispatch }: any, payload: { id: agentNodeId, staker: ConfigStaker }) {
+      commit('updateStaker', payload);
+      dispatch('storeConfig');
+    },
+    deleteStaker({ commit, dispatch }: any, payload: { id: agentNodeId, staker: ConfigStaker }) {
+      commit('deleteStaker', payload);
       dispatch('storeConfig');
     },
     storeConfig({ state }: any) {

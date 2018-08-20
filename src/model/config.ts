@@ -1,3 +1,4 @@
+import { NodeStaker } from './stakers';
 import { DurationInputArg2 } from 'moment';
 import { agentNodeId } from './common';
 
@@ -6,6 +7,7 @@ export interface ConfigNode {
   serverCosts?: ConfigServerCosts;
   paymentFreq?: DurationInputArg2; // 'month' | 'week' | 'day';
   lastPaymentDate?: string;
+  stakers: ConfigStaker[];
 }
 
 export interface Config {
@@ -22,3 +24,5 @@ export interface ConfigServerCosts {
   currency: ConfigCurrencyType;
   price: number;
 }
+
+export interface ConfigStaker extends NodeStaker {}

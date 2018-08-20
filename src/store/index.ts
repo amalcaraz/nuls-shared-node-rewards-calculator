@@ -10,6 +10,7 @@ import transactions from './modules/transactions';
 import rewards from './modules/rewards';
 import price from './modules/price';
 
+
 Vue.use(Vuex);
 
 const store = new Vuex.Store({

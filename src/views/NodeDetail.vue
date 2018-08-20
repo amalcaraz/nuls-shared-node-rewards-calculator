@@ -25,7 +25,12 @@
       </v-container>
     </section>
     <section>
-      <h2 class="title">Partners</h2>
+      <h2 class="title">Stakers</h2>
+      <agent-node-stakers :nodeStakers="currentNodeStakers"
+                          @newStaker="onNewStaker"
+                          @updateStaker="onUpdateStaker"
+                          @deleteStaker="onDeleteStaker"                          
+      ></agent-node-stakers>
     </section>
   </div>
 </template>
@@ -38,6 +43,7 @@ import { WalletDetail } from '@/model/wallet';
 import { ConfigNode, ConfigServerCosts } from '@/model/config';
 import AgentNode from '@/components/AgentNode.vue';
 import AgentNodeRewards from '@/components/AgentNodeRewards.vue';
+import AgentNodeStakers from '@/components/AgentNodeStakers.vue';
 import * as walletService from '../services/wallet';
 import { NodeRewards, NodeRewardsFilters } from '@/model/rewards';
 import { Transaction } from '@/model/transactions';
@@ -46,18 +52,19 @@ import { BlocksFilters } from '@/model/blocks';
 import { balanceNumber } from '@/model/common';
 import { ServerCostsPrice } from '@/model/price';
 import { setTimeout } from 'timers';
+import { NodeStaker } from '@/model/stakers';
 
 @Component({
   components: {
     AgentNode,
     AgentNodeRewards,
+    AgentNodeStakers,
   },
 })
 export default class SelectNode extends Vue {
 
   public startDate: Moment | null = null;
   public endDate: Moment | null = null;
-  // public currentNodeRewards!: NodeRewards;
 
   get currentAgentNode(): ConsensusAgentNode {
     return this.$store.getters['consensus/agentNodeByHash'](
@@ -107,6 +114,12 @@ export default class SelectNode extends Vue {
     };
   }
 
+  get currentNodeStakers(): NodeStaker[] {
+    return this.$store.getters['config/stakers'](
+      this.currentAgentNode.agentId,
+    );
+   }
+
   public async created() {
     this.initNodeConfig();
     this.fetchRewards();
@@ -146,6 +159,18 @@ export default class SelectNode extends Vue {
     //   startDate: this.nodeRewards.paymentDateRange.startDate,
     //   endDate,
     // });
+  }
+
+  public onNewStaker(staker: NodeStaker) {
+    this.$store.dispatch('config/addStaker', { id: this.currentAgentNode.agentId, staker });
+  }
+
+  public onUpdateStaker(staker: NodeStaker) {
+    this.$store.dispatch('config/updateStaker', { id: this.currentAgentNode.agentId, staker });
+  }
+
+  public onDeleteStaker(staker: NodeStaker) {
+    this.$store.dispatch('config/deleteStaker', { id: this.currentAgentNode.agentId, staker });
   }
 
   private initNodeConfig() {
