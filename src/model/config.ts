@@ -1,6 +1,6 @@
 import { NodeStaker } from './stakers';
 import { DurationInputArg2 } from 'moment';
-import { agentNodeId } from './common';
+import { agentNodeId, address, balanceNumber } from './common';
 
 export interface ConfigNode {
   agentNodeId: agentNodeId;
@@ -25,4 +25,10 @@ export interface ConfigServerCosts {
   price: number;
 }
 
-export interface ConfigStaker extends NodeStaker {}
+export interface ConfigStaker {
+  address: address;
+  alias?: string;
+  email?: string;
+  staked: balanceNumber;
+  profitRate?: number;
+}

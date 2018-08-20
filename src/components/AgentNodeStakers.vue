@@ -13,6 +13,7 @@
         <td class="text-xs-left">{{ props.item.alias }}</td>
         <td class="text-xs-left">{{ props.item.email }}</td>
         <td class="text-xs-left">{{ props.item.profitRate }}</td>
+        <td class="text-xs-left success--text"><strong>{{ props.item.totalProfit }}</strong></td>
         <td class="justify-center layout px-0">
           <v-icon small class="mr-2" @click="onOpenNewStakerForm(props.item)">edit</v-icon>
           <v-icon small @click="onDeleteStaker(props.item)">delete</v-icon>
@@ -23,7 +24,7 @@
       </template>
       <template slot="footer">
         <td class="text-xs-right" colspan="1">Total staked:</td>
-        <td class="text-xs-left" colspan="5">{{totalStaked | nulsCurrency}} <i class="nuls light"></i></td>
+        <td class="text-xs-left" colspan="6">{{totalStaked | nulsCurrency}} <i class="nuls light"></i></td>
       </template>
     </v-data-table>
     <v-dialog v-model="stakerFormOpen" persistent max-width="500px">
@@ -60,6 +61,7 @@ export default class AgentNodeStakers extends Vue {
     { text: 'Alias', value: 'alias', sortable: true, align: 'left' },
     { text: 'Email', value: 'email', sortable: true, align: 'left' },
     { text: 'Profit rate', value: 'profitRate', sortable: true, align: 'left' },
+    { text: 'Total profit', value: 'totalProfit', sortable: true, align: 'left' },
     { text: 'Actions', value: 'actions', sortable: false, align: 'left' },
   ];
 

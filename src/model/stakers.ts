@@ -1,9 +1,6 @@
-import { address, balanceNumber } from '@/model/common';
+import { balanceNumber } from './common';
+import { ConfigStaker } from '@/model/config';
 
-export interface NodeStaker {
-  address: address;
-  alias?: string;
-  email?: string;
-  staked: balanceNumber;
-  profitRate?: number;
+export interface NodeStaker extends ConfigStaker {
+  totalProfit?: balanceNumber;
 }

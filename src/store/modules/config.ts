@@ -54,7 +54,7 @@ export default {
       const node: ConfigNode | undefined = findNodeConfigById(state.config.nodes, id);
       if (node) {
         if (!Array.isArray(node.stakers)) {
-          node.stakers = [];
+          Vue.set(node, 'stakers', []);
         }
         node.stakers.push(staker);
       }
