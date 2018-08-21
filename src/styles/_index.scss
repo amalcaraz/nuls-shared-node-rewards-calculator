@@ -30,12 +30,25 @@ i.nuls {
   background-position: center bottom;
   background-repeat: no-repeat;
 
-  &.dark {
-    filter: grayscale(100%) contrast(160%) brightness(2);
+  .theme--light & {
+    filter: none;
+
+    &.dark {
+      filter: grayscale(100%) brightness(0.9);
+    }
+
   }
 
-  &.light {
-    filter: grayscale(100%) contrast(160%) brightness(0.6);
+  .theme--dark & {
+    filter: grayscale(100%) brightness(0.9);
+
+    &.light {
+      filter: grayscale(100%) brightness(2);
+    }
+  }
+
+  &.primary--text {
+    filter: none;
   }
 }
 

@@ -10,8 +10,8 @@
         <v-flex xs6>
           <div><agent-node-status :status="agentNode.status" :credit="agentNode.creditVal"></agent-node-status></div>
           <div class="grey--text"><v-icon color="grey" small>person</v-icon> {{agentNode.memberCount}}</div>
-          <div class="grey--text"><v-icon color="grey" small>account_balance_wallet</v-icon> {{agentNode.deposit | nulsCurrency}} <i class="nuls light"></i></div>
-          <div class="grey--text"><v-icon color="grey" small>monetization_on</v-icon> {{agentNode.totalDeposit | nulsCurrency}} <i class="nuls light"></i></div>
+          <div class="grey--text"><v-icon color="grey" small>account_balance_wallet</v-icon> {{agentNode.deposit | nulsCurrency}} <i class="nuls"></i></div>
+          <div class="grey--text"><v-icon color="grey" small>monetization_on</v-icon> {{agentNode.totalDeposit | nulsCurrency}} <i class="nuls"></i></div>
         </v-flex>
       </v-layout>
       <v-layout>

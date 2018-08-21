@@ -40,9 +40,14 @@ export default class AgentNodeCollection extends Vue {
   public filter: string = '';
 
   get filteredAgentNodes(): ConsensusAgentNode[] {
+
+    const filterLowerCased: string = this.filter.toLowerCase();
+
     return this.agentNodes.filter((node: ConsensusAgentNode) =>
-      (node.agentId.indexOf(this.filter) >= 0) ||
-      ((node.agentName ? node.agentName : node.agentAddress).indexOf(this.filter) >= 0));
+      (node.agentId.toLowerCase().indexOf(filterLowerCased) >= 0) ||
+      ((node.agentName ? node.agentName : node.agentAddress).toLowerCase().indexOf(filterLowerCased) >= 0),
+    );
+
   }
 
   public onClick(node: ConsensusAgentNode) {

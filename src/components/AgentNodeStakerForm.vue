@@ -33,18 +33,12 @@
           type="email"
           :rules="emailRules"
         ></v-text-field>
-        <v-text-field
-          label="Profit rate"
-          min="0"
-          step=".01"
-          v-model="modelStaker.profitRate"
-          type="number"
-        ></v-text-field>
       </v-card-text>
       <v-card-actions>
-        <v-btn color="primary" type="submit" :disabled="!valid">Submit</v-btn>
-        <v-btn color="reset" flat @click.stop="$refs.form.reset()">Reset</v-btn>
         <v-btn color="error" flat @click.stop="onCancel">Cancel</v-btn>
+        <v-btn color="warning" flat @click.stop="$refs.form.reset()">Reset</v-btn>
+        <v-spacer></v-spacer>
+        <v-btn color="primary" type="submit" :disabled="!valid">Submit</v-btn>
       </v-card-actions>
     </v-card>
   </v-form>
@@ -105,10 +99,6 @@ export default class AgentNodeNewStakerForm extends Vue {
       ...this.modelStaker,
       staked: nulsDecimalsToInt(parseFloat(this.modelStaker.staked)),
     };
-
-    if (this.modelStaker.profitRate) {
-      response.profitRate = parseFloat(this.modelStaker.profitRate);
-    }
 
     return response;
   }

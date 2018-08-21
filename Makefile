@@ -1,4 +1,4 @@
-.PHONY: build-dev dev test shell down-dev build
+.PHONY: build-dev dev prod test shell down-dev build
 
 YML_DEV=environment/dev/docker-compose.yml
 COMPOSE_DEV=docker-compose -f ${YML_DEV}
@@ -8,6 +8,9 @@ build-dev:
 
 dev: build-dev down-dev
 	${COMPOSE_DEV} run --rm --service-ports nuls dev
+
+prod: build-dev down-dev
+	${COMPOSE_DEV} run --rm --service-ports nuls prod
 
 build: build-dev down-dev
 	${COMPOSE_DEV} run --rm --service-ports nuls build

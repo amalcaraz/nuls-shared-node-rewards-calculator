@@ -4,6 +4,7 @@
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve",
+    "serve:prod": "export NODE_ENV=production && vue-cli-service serve",
     "build": "vue-cli-service build",
     "deploy:gh": "npm run build; push-dir --dir=dist --branch=gh-pages --cleanup",
     "lint": "vue-cli-service lint",

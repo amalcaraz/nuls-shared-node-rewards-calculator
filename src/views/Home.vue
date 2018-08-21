@@ -1,21 +1,23 @@
 <template>
   <div>
-    <v-card tile flat>
+    <v-card tile flat color="transparent">
       <v-card-text>
         <v-layout wrap justify-space-around>
           <div v-if="!userNodes || userNodes.length === 0">
-            <h4 class="headline">There is no nodes. <br/> Add the first one!</h4>
+            <h4 class="headline text-xs-center">There are no nodes <br/> Add the first one!</h4>
           </div>
-          <agent-node-collection :agentNodes="userNodes"
-                                  @nodeSelected="onNodeSelected"></agent-node-collection>
+          <agent-node-collection v-else
+                                 :agentNodes="userNodes"
+                                 @nodeSelected="onNodeSelected"></agent-node-collection>
         </v-layout>
       </v-card-text>
       <v-card-actions>
-        <v-btn :to="{name: 'add-node'}" absolute dark fab bottom right color="secondary">
-          <v-icon>add</v-icon>
-        </v-btn>      
+        <v-btn :to="{name: 'add-node'}" absolute dark fab bottom right color="primary">
+      <v-icon>add</v-icon>
+    </v-btn>
       </v-card-actions>
     </v-card>
+   
   </div>
 </template>
 

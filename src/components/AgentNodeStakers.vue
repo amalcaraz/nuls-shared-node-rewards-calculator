@@ -2,19 +2,18 @@
   <div class="agent-node-stakers">
     <v-data-table
       :headers="headers"
-      :items="nodeStakers"
+      :items="stakersWithRewards"
       item-key="address"
       hide-actions
       class="elevation-1"
     >
       <template slot="items" slot-scope="props">
         <td class="text-xs-left">{{ props.item.address }}</td>
-        <td class="text-xs-left digit">{{ props.item.staked | nulsCurrency}} <i class="nuls light"></i></td>
+        <td class="text-xs-left digit">{{ props.item.staked | nulsCurrency}} <i class="nuls"></i></td>
         <td class="text-xs-left">{{ props.item.alias }}</td>
         <td class="text-xs-left">{{ props.item.email }}</td>
-        <td class="text-xs-left">{{ props.item.profitRate }}</td>
         <td class="text-xs-left digit success--text">
-          <strong>{{ (props.item.staked / totalStaked) * nodeRewards.totalToShare | nulsCurrency }} <i class="nuls light"></i></strong>
+          <strong>{{ props.item.totalRewards | nulsCurrency }} <i class="nuls"></i></strong>
         </td>
         <td class="justify-center layout px-0">
           <v-icon small class="mr-2" @click="onOpenNewStakerForm(props.item)">edit</v-icon>
@@ -26,10 +25,10 @@
       </template>
       <template slot="footer">
         <td class="text-xs-right" colspan="1">Total staked:</td>
-        <td class="text-xs-left digit" colspan="1">{{totalStaked | nulsCurrency}} <i class="nuls light"></i></td>
-        <td class="text-xs-right" colspan="3">Total profit:</td>
+        <td class="text-xs-left digit" colspan="1">{{totalStaked | nulsCurrency}} <i class="nuls"></i></td>
+        <td class="text-xs-right" colspan="2">Total rewards:</td>
         <td class="text-xs-left digit success--text" colspan="2">
-          <strong>{{nodeRewards.totalToShare | nulsCurrency}} <i class="nuls light"></i></strong>
+          <strong>{{nodeRewards.totalToShare | nulsCurrency}} <i class="nuls"></i></strong>
         </td>
       </template>
     </v-data-table>
@@ -38,7 +37,7 @@
                               @cancel="onCancelForm"
                               @staker="onStakerReceived"></agent-node-staker-form>
     </v-dialog>
-    <v-btn @click="onOpenNewStakerForm(null)" absolute dark fab bottom right color="secondary">
+    <v-btn @click="onOpenNewStakerForm(null)" absolute dark fab bottom right color="primary">
       <v-icon>add</v-icon>
     </v-btn>
   </div>
@@ -68,10 +67,18 @@ export default class AgentNodeStakers extends Vue {
     { text: 'Staked', value: 'staked', sortable: true, align: 'left' },
     { text: 'Alias', value: 'alias', sortable: true, align: 'left' },
     { text: 'Email', value: 'email', sortable: true, align: 'left' },
-    { text: 'Profit rate', value: 'profitRate', sortable: true, align: 'left' },
-    { text: 'Profits', value: 'totalProfit', sortable: true, align: 'left' },
+    { text: 'Rewards', value: 'totalRewards', sortable: true, align: 'left' },
     { text: 'Actions', value: 'actions', sortable: false, align: 'left' },
   ];
+
+  get stakersWithRewards(): NodeStaker[] {
+    return this.nodeStakers
+      ? this.nodeStakers.map((staker: NodeStaker) => {
+        staker.totalRewards = (staker.staked / this.totalStaked) * this.nodeRewards.totalToShare;
+        return staker;
+      })
+      : [];
+  }
 
   get totalStaked(): balanceNumber {
     return this.nodeStakers ? this.nodeStakers.reduce((prev: balanceNumber, curr: NodeStaker) => prev + curr.staked, 0) : 0;

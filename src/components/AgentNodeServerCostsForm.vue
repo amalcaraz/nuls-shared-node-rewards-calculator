@@ -26,8 +26,9 @@
         ></v-text-field>
       </v-card-text>
       <v-card-actions>
-        <v-btn color="primary" @click.stop="onSubmit">Submit</v-btn>
         <v-btn color="error" flat @click.stop="onClose">Close</v-btn>
+        <v-spacer></v-spacer>
+        <v-btn color="primary" @click.stop="onSubmit">Submit</v-btn>
       </v-card-actions>
     </v-card>
   </v-dialog>

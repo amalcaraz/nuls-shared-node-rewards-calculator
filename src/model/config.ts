@@ -30,5 +30,4 @@ export interface ConfigStaker {
   alias?: string;
   email?: string;
   staked: balanceNumber;
-  profitRate?: number;
 }

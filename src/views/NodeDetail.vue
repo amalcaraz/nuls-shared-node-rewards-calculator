@@ -2,19 +2,13 @@
   <div>
     <section>
       <v-container class="pa-0" grid-list-lg fluid>
-        <v-layout row wrap>
-          <v-flex xs12 sm6 class="py-0">
+        <v-layout row wrap class="">
+          <v-flex xs12 sm6 md4>
             <h2 class="title">Details</h2>
-          </v-flex>
-          <v-flex xs12 sm6 class="py-0">
-            <h2 class="title">Rewards</h2>
-          </v-flex>
-        </v-layout>
-        <v-layout row wrap class="full-height">
-          <v-flex xs12 sm6>
             <agent-node :agentNode="currentAgentNode"></agent-node>
           </v-flex>
-          <v-flex xs12 sm6>
+          <v-flex xs12 sm12 md8>
+            <h2 class="title">Rewards</h2>
             <agent-node-rewards :nodeRewards="currentNodeRewards"
                                 @startDateChanged="onStartDateChanged"
                                 @endDateChanged="onEndDateChanged"

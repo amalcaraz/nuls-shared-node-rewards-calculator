@@ -7,7 +7,8 @@ export const customTheme = {
   base: '#8ab54d',
   primary: '#8ab54d',
   secondary: '#658ec7',
-  error: '#b54d4d',
+  error: '#d43d3d',
+  success: '#8ab54d',
 };
 
 console.log(customTheme);
@@ -16,7 +17,8 @@ Vue.use(Vuetify, {
   theme: {
     primary: customTheme.primary,
     secondary: customTheme.secondary,
-    accent: colors.shades.black,
+    accent: customTheme.error,
     error: customTheme.error,
+    success: customTheme.success,
   },
 });

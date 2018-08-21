@@ -23,7 +23,7 @@
               prepend-icon="event"
               readonly
             ></v-text-field>
-            <v-date-picker :value="startDate" @input="onStartDateChanged($event)"></v-date-picker>
+            <v-date-picker :value="startDate" @input="onStartDateChanged($event)" color="primary"></v-date-picker>
           </v-menu>
         </v-flex>
         <v-flex xs2 justify-center d-flex>
@@ -50,36 +50,48 @@
               prepend-icon="event"
               readonly
             ></v-text-field>
-            <v-date-picker :value="endDate" @input="onEndDateChanged($event)"></v-date-picker>
+            <v-date-picker :value="endDate" @input="onEndDateChanged($event)" color="primary"></v-date-picker>
           </v-menu>
         </v-flex>
       </v-layout>
       <v-layout>
-        <v-flex xs12>
+        <v-flex xs12 class="pt-0">
           <v-layout>
-            <v-flex shrink>
-              <div>Node balance:</div>
-              <div>Total rewards:</div>
-              <div>Owner staking rewards:</div>
-              <div>Server maintenance costs:</div>
-              <div>Total rewards to share:</div>
+            <v-flex xs6>
+              <v-layout>
+                <v-flex shrink>
+                  <div>Node balance:</div>
+                  <div>Total rewards:</div>
+                  <div>Owner staking rewards:</div>
+                </v-flex>
+                <v-flex grow>
+                  <div class="grey--text">
+                    <strong>{{nodeRewards.nodeBalance | nulsCurrency}} <i class="nuls"></i></strong>
+                  </div>
+                  <div class="secondary--text">
+                    <strong>{{nodeRewards.totalRewards | nulsCurrency}} <i class="nuls"></i></strong>
+                  </div>
+                  <div class="secondary--text">
+                    <strong>{{nodeRewards.stakingRewards | nulsCurrency}} <i class="nuls"></i></strong>
+                  </div>
+                </v-flex>
+              </v-layout>
             </v-flex>
-            <v-flex grow>
-              <div class="grey--text">
-                <span>{{nodeRewards.nodeBalance | nulsCurrency}} <i class="nuls light"></i></span>
-              </div>
-              <div class="green--text">
-                <span>{{nodeRewards.totalRewards | nulsCurrency}} <i class="nuls light"></i></span>
-              </div>
-              <div class="blue--text">
-                <span>{{nodeRewards.stakingRewards | nulsCurrency}} <i class="nuls light"></i></span>
-              </div>
-              <div class="red--text server-costs">
-                <span class="editable" @click="openServerCostsForm">{{nodeRewards.serverCosts.nulsPrice | nulsCurrency}} <i class="nuls light"></i></span>
-              </div>
-              <div class="black--text">
-                <span>{{nodeRewards.totalToShare | nulsCurrency}} <i class="nuls light"></i></span>
-              </div>
+            <v-flex xs6>
+              <v-layout>
+                <v-flex shrink>
+                  <div>Server maintenance costs:</div>
+                  <div>Total rewards to share:</div>
+                </v-flex>
+                <v-flex grow>
+                  <div class="error--text server-costs">
+                    <strong class="editable" @click="openServerCostsForm">{{nodeRewards.serverCosts.nulsPrice | nulsCurrency}} <i class="nuls"></i></strong>
+                  </div>
+                  <div class="primary--text">
+                    <strong>{{nodeRewards.totalToShare | nulsCurrency}} <i class="nuls"></i></strong>
+                  </div>
+                </v-flex>
+              </v-layout>
             </v-flex>
           </v-layout>
         </v-flex>

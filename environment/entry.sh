@@ -7,6 +7,12 @@ then
     yarn install
     yarn run serve
 
+elif [ "$1" = 'prod' ]
+then
+
+    yarn install
+    yarn run serve:prod
+
 elif [ "$1" = 'test' ]
 then
 

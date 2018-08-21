@@ -1,8 +1,8 @@
 <template>
-  <v-app id="app">
-    <v-toolbar app fixed dark color="primary" clipped-left>
-      <v-btn icon>
-        <i id="nuls-logo" class="nuls dark"></i>
+  <v-app id="app" dark>
+    <v-toolbar app fixed clipped-left>
+      <v-btn flat icon :to="{name: 'home'}" color="transparent" :ripple="false">
+        <i id="nuls-logo" class="nuls primary--text"></i>
       </v-btn>
       <v-toolbar-title>
         Shared node rewards calculator
@@ -20,8 +20,21 @@
         </v-layout>
       </v-container>
     </v-content>
-    <v-footer dark color="primary">
-       <span>&nbsp;&nbsp;amalcaraz89@gmail.com &copy; 2018</span>
+    <v-footer height="auto">
+      <v-container>
+        <v-layout>
+          <v-flex xs12>
+            <strong class="subheading">Angel Manzano</strong>
+            <div class="caption grey--text">&copy; 2018</div>
+          </v-flex>
+          <v-flex xs12 class="text-xs-right">
+            <strong class="subheading">Donation address</strong>
+            <div class="caption">Nuls: <a href="https://nuls.world/addresses/NsdvprVBQbZLRnXPKiZFBzUbgnnHqi3d" target="_blank" class="grey--text">NsdvprVBQbZLRnXPKiZFBzUbgnnHqi3d</a></div>
+            <div class="caption">Btc: <span class="grey--text">1HZNA6VhuLmQrCE77hurCQwx4cNnj4Avg5</span></div>            
+            <div class="caption">Eth: <span class="grey--text">0x164f78f362f2be22212c23ce427110a18e2e6b5e</span></div>
+          </v-flex>
+        </v-layout>
+      </v-container>
     </v-footer>
   </v-app>
 </template>
