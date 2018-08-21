@@ -1,6 +1,6 @@
 {
-  "name": "nuls-shared-node-rewards-calculator",
-  "short_name": "nuls-shared-node-rewards-calculator",
+  "name": "Nuls shared node rewards calculator",
+  "short_name": "Nuls SNRC",
   "icons": [
     {
      "src": "\/android-icon-36x36.png",

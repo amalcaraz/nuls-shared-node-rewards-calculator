@@ -1,23 +1,16 @@
 <template>
-  <div>
-    <v-card tile flat color="transparent">
-      <v-card-text>
-        <v-layout wrap justify-space-around>
-          <div v-if="!userNodes || userNodes.length === 0">
-            <h4 class="headline text-xs-center">There are no nodes <br/> Add the first one!</h4>
-          </div>
-          <agent-node-collection v-else
-                                 :agentNodes="userNodes"
-                                 @nodeSelected="onNodeSelected"></agent-node-collection>
-        </v-layout>
-      </v-card-text>
-      <v-card-actions>
-        <v-btn :to="{name: 'add-node'}" absolute dark fab bottom right color="primary">
+  <div class="home">
+    <v-layout wrap justify-space-around>
+      <div v-if="!userNodes || userNodes.length === 0">
+        <h4 class="headline text-xs-center">There are no nodes <br/> Add the first one!</h4>
+      </div>
+      <agent-node-collection v-else
+                             :agentNodes="userNodes"
+                             @nodeSelected="onNodeSelected"></agent-node-collection>
+    </v-layout>
+    <v-btn :to="{name: 'add-node'}" absolute dark fab bottom right color="primary">
       <v-icon>add</v-icon>
     </v-btn>
-      </v-card-actions>
-    </v-card>
-   
   </div>
 </template>
 
@@ -54,3 +47,11 @@ export default class Home extends Vue {
   }
 }
 </script>
+
+<style lang="scss" scoped>
+  .home {
+    position: relative;
+    padding-bottom: 3em;
+    margin-bottom: 2em;
+  }
+</style>

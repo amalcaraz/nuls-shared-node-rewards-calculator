@@ -64,7 +64,7 @@
                   <div>Total rewards:</div>
                   <div>Owner staking rewards:</div>
                 </v-flex>
-                <v-flex grow>
+                <v-flex grow class="text-xs-right">
                   <div class="grey--text">
                     <strong>{{nodeRewards.nodeBalance | nulsCurrency}} <i class="nuls"></i></strong>
                   </div>
