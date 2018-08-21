@@ -56,8 +56,8 @@
       </v-layout>
       <v-layout>
         <v-flex xs12 class="pt-0">
-          <v-layout>
-            <v-flex xs6>
+          <v-layout wrap>
+            <v-flex xs12 sm4 md6 lg4>
               <v-layout>
                 <v-flex shrink>
                   <div>Node balance:</div>
@@ -77,13 +77,13 @@
                 </v-flex>
               </v-layout>
             </v-flex>
-            <v-flex xs6>
+            <v-flex xs12 sm4 md6 lg4>
               <v-layout>
                 <v-flex shrink>
                   <div>Server maintenance costs:</div>
                   <div>Total rewards to share:</div>
                 </v-flex>
-                <v-flex grow>
+                <v-flex grow class="text-xs-right">
                   <div class="error--text server-costs">
                     <strong class="editable" @click="openServerCostsForm">{{nodeRewards.serverCosts.nulsPrice | nulsCurrency}} <i class="nuls"></i></strong>
                   </div>

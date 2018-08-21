@@ -1,7 +1,7 @@
 <template>
   <v-dialog v-model="isOpen" persistent max-width="500px">
-    <v-card class="title">
-      <v-card-title>
+    <v-card>
+      <v-card-title class="title">
         Server costs
       </v-card-title>
       <v-card-text>

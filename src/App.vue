@@ -3,16 +3,12 @@
     <v-toolbar app fixed clipped-left class="pa-0">
       <v-container class="py-0 app-toolbar__container">
         <v-layout align-center>
-          <v-flex shrink>
             <v-btn flat icon :to="{name: 'home'}" color="transparent" :ripple="false">
               <i id="nuls-logo" class="nuls primary--text"></i>
             </v-btn>
-          </v-flex>
-          <v-flex>
             <v-toolbar-title class="app-title">
               Shared node rewards calculator
             </v-toolbar-title>
-          </v-flex>
         </v-layout>
       </v-container>
     </v-toolbar>

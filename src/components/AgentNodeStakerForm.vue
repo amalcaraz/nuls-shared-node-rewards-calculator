@@ -1,7 +1,7 @@
 <template>
   <v-form @submit.prevent="onSubmit" v-model="valid" ref="form">
-    <v-card class="title">
-      <v-card-title>
+    <v-card>
+      <v-card-title class="title">
         New Staker
       </v-card-title>
       <v-card-text>
@@ -82,11 +82,13 @@ export default class AgentNodeNewStakerForm extends Vue {
 
   public onCancel() {
     this.$emit('cancel');
+    this.clearForm();
   }
 
   public onSubmit() {
     if (this.valid) {
       this.$emit('staker', this.getResponse());
+      this.clearForm();
     }
   }
 

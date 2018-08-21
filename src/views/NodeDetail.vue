@@ -97,8 +97,6 @@ export default class SelectNode extends Vue {
       this.currentAgentNode,
     );
 
-    console.log('ry');
-
     return {
       nodeBalance: walletDetail.unspent_info.available_value,
       totalRewards: nodeRewards,

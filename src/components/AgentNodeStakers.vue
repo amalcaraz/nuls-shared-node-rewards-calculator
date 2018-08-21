@@ -84,7 +84,7 @@ export default class AgentNodeStakers extends Vue {
     return this.nodeStakers ? this.nodeStakers.reduce((prev: balanceNumber, curr: NodeStaker) => prev + curr.staked, 0) : 0;
   }
 
-  public onOpenNewStakerForm(staker: NodeStaker) {
+  public onOpenNewStakerForm(staker: NodeStaker | null) {
     this.selectedStaker = staker;
     this.stakerFormOpen = true;
   }
@@ -104,13 +104,13 @@ export default class AgentNodeStakers extends Vue {
   }
 
   public onDeleteStaker(staker: NodeStaker) {
-    this.onCancelForm();
     this.$emit('deleteStaker', staker);
+    this.onCancelForm();
   }
 
   public onUpdateStaker(staker: NodeStaker) {
-    this.onCancelForm();
     this.$emit('deleteStaker', staker);
+    this.onCancelForm();
   }
 
 }
