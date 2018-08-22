@@ -7,7 +7,7 @@
               <i id="nuls-logo" class="nuls primary--text"></i>
             </v-btn>
             <v-toolbar-title class="app-title">
-              Shared node rewards calculator
+              Shared node rewards calculator --
             </v-toolbar-title>
         </v-layout>
       </v-container>
@@ -40,19 +40,34 @@
         </v-layout>
       </v-container>
     </v-footer>
+    <v-snackbar v-model="reloadClaim"
+                multi-line="multi-line"
+                :timeout="0"
+                top>
+      The app has been updated
+      <v-btn color="success" flat @click="reload">Reload</v-btn>
+      <v-btn color="error" flat @click="setReloadClaim(false)">Cancel</v-btn>
+    </v-snackbar>
   </v-app>
 </template>
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
-import { mapGetters } from 'vuex';
+import { mapGetters, mapMutations } from 'vuex';
 
 @Component({
   computed: {
-    ...mapGetters('layout', ['loading']),
+    ...mapGetters('layout', ['loading', 'reloadClaim']),
+  },
+  methods: {
+    ...mapMutations('layout', ['setReloadClaim']),
   },
 })
 export default class App extends Vue {
+
+  public reload() {
+    location.reload(true);
+  }
 
   public created() {
     this.$store.dispatch('config/retrieveConfig');

@@ -49,12 +49,12 @@ const router = new Router({
 });
 
 router.beforeEach((to, form, next) => {
-  store.commit('layout/loading', true);
+  store.commit('layout/setLoading', true);
   next();
 });
 
 router.afterEach((to, form) => {
-  store.commit('layout/loading', false);
+  store.commit('layout/setLoading', false);
 });
 
 export default router;
