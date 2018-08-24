@@ -12,6 +12,9 @@ const router = new Router({
     {
       path: '/',
       name: 'home',
+      meta: {
+        title: 'Your portfolio',
+      },
       component: Home,
       beforeEnter: async (to, from, next) => {
         await store.dispatch('consensus/fetchAgentNodes');
@@ -21,6 +24,9 @@ const router = new Router({
     {
       path: '/add-node',
       name: 'add-node',
+      meta: {
+        title: 'Add a node to your portfolio',
+      },
       component: AddNode,
       beforeEnter: async (to, from, next) => {
         await store.dispatch('consensus/fetchAgentNodes');
@@ -30,6 +36,9 @@ const router = new Router({
     {
       path: '/node-detail/:hash',
       name: 'node-detail',
+      meta: {
+        title: 'Node rewards detailed',
+      },
       component: NodeDetail,
       beforeEnter: async (to, from, next) => {
         const nodeHash = to.params.hash;

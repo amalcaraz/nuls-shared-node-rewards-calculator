@@ -7,7 +7,8 @@
               <i id="nuls-logo" class="nuls primary--text"></i>
             </v-btn>
             <v-toolbar-title class="app-title">
-              Shared node rewards calculator
+              <template v-if="routeTitle">{{routeTitle}}</template>
+              <template v-else>Shared node rewards calculator</template>
             </v-toolbar-title>
         </v-layout>
       </v-container>
@@ -64,6 +65,10 @@ import { mapGetters, mapMutations } from 'vuex';
   },
 })
 export default class App extends Vue {
+
+  public get routeTitle(): string {
+    return this.$route.meta.title;
+  }
 
   public reload() {
     location.reload(true);

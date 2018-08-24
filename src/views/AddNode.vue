@@ -1,6 +1,6 @@
 <template>
   <agent-node-collection :agentNodes="allAgentNodes"
-                        @nodeSelected="onNodeSelected"></agent-node-collection>
+                         @nodeSelected="onNodeSelected"></agent-node-collection>
 </template>
 
 <script lang="ts">

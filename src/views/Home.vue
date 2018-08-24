@@ -5,8 +5,10 @@
         <h4 class="headline text-xs-center">There are no nodes <br/> Add the first one!</h4>
       </div>
       <agent-node-collection v-else
-                             :agentNodes="userNodes"
-                             @nodeSelected="onNodeSelected"></agent-node-collection>
+                         :agentNodes="userNodes"
+                         :removable="true"
+                         @nodeSelected="onNodeSelected"
+                         @nodeRemoved="onNodeRemoved"></agent-node-collection>
     </v-layout>
     <v-btn :to="{name: 'add-node'}" absolute dark fab bottom right color="primary">
       <v-icon>add</v-icon>
@@ -45,6 +47,12 @@ export default class Home extends Vue {
   public onNodeSelected(node: ConsensusAgentNode) {
     this.$router.push({ name: 'node-detail', params: { hash: node.agentHash } });
   }
+
+  public onNodeRemoved(node: ConsensusAgentNode) {
+    debugger
+    this.$store.dispatch('config/removeNode', { agentNodeId: node.agentId } as ConfigNode);
+  }
+
 }
 </script>
 

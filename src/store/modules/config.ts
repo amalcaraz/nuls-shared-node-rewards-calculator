@@ -50,6 +50,13 @@ export default {
 
       state.config.nodes = [...state.config.nodes, ...newAgentNodes];
     },
+    removeNode(state: any, nodes: ConfigNode | ConfigNode[]) {
+      const removeAgentNodes = [].concat.call([], nodes);
+      const result = state.config.nodes
+        .filter((storedNode: ConfigNode) => !removeAgentNodes.some((deletedNode: ConfigNode) => deletedNode.agentNodeId === storedNode.agentNodeId));
+      state.config.nodes = [...result];
+
+    },
     addStaker(state: any, { id, staker }: { id: agentNodeId, staker: ConfigStaker }) {
       const node: ConfigNode | undefined = findNodeConfigById(state.config.nodes, id);
       if (node) {
@@ -80,6 +87,10 @@ export default {
   actions: {
     addNode({ commit, dispatch }: any, node: ConfigNode | ConfigNode[]) {
       commit('addNode', node);
+      dispatch('storeConfig');
+    },
+    removeNode({ commit, dispatch }: any, node: ConfigNode | ConfigNode[]) {
+      commit('removeNode', node);
       dispatch('storeConfig');
     },
     updateServerCosts({ commit, dispatch }: any, payload: { id: agentNodeId, serverCosts: ConfigServerCosts }) {
