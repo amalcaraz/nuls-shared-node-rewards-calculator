@@ -3,11 +3,12 @@
     ref="dateTimePickerMenu"
     :close-on-content-click="false"
     v-model="dateTimePickerMenu"
-    :nudge-right="40"
+    :nudge-right="30"
     lazy
     transition="scale-transition"
     offset-y
-    class="d-block"
+    full-width
+    :max-width="width"
   >
     <v-text-field
       slot="activator"
