@@ -7,7 +7,7 @@
               <i id="nuls-logo" class="nuls primary--text"></i>
             </v-btn>
             <v-toolbar-title class="app-title">
-              Shared node rewards calculator --
+              Shared node rewards calculator
             </v-toolbar-title>
         </v-layout>
       </v-container>

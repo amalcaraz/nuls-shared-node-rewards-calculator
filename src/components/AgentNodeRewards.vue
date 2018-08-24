@@ -3,55 +3,17 @@
     <v-card-text>
       <v-layout>
         <v-flex xs5>
-          <v-menu
-            ref="startDateMenu"
-            :close-on-content-click="false"
-            v-model="startDateMenu"
-            :nudge-right="40"
-            lazy
-            transition="scale-transition"
-            offset-y
-            full-width
-            min-width="290px"
-          >
-            <!-- <div slot="activator"><v-icon color="grey" small>event</v-icon> {{date}}</div> -->
-            <v-text-field
-              class="ma-0"
-              slot="activator"
-              :value="startDate"
-              label=""
-              prepend-icon="event"
-              readonly
-            ></v-text-field>
-            <v-date-picker :value="startDate" @input="onStartDateChanged($event)" color="primary"></v-date-picker>
-          </v-menu>
+          <date-time-picker-menu-field :value="startDate"
+                                       label="Start Date"
+                                       @input="onStartDateChanged($event)"></date-time-picker-menu-field>
         </v-flex>
         <v-flex xs2 justify-center d-flex>
           <v-icon>arrow_right_alt</v-icon>
         </v-flex>
         <v-flex xs5>
-          <v-menu
-            ref="endDateMenu"
-            :close-on-content-click="false"
-            v-model="endDateMenu"
-            :nudge-right="40"
-            lazy
-            transition="scale-transition"
-            offset-y
-            full-width
-            min-width="290px"
-          >
-            <!-- <div slot="activator"><v-icon color="grey" small>event</v-icon> {{date}}</div> -->
-            <v-text-field
-              class="ma-0"
-              slot="activator"
-              :value="endDate"
-              label=""
-              prepend-icon="event"
-              readonly
-            ></v-text-field>
-            <v-date-picker :value="endDate" @input="onEndDateChanged($event)" color="primary"></v-date-picker>
-          </v-menu>
+          <date-time-picker-menu-field :value="endDate" 
+                                       label="End Date"
+                                       @input="onEndDateChanged($event)"></date-time-picker-menu-field>
         </v-flex>
       </v-layout>
       <v-layout>
@@ -107,27 +69,30 @@
 import { Component, Vue, Prop } from 'vue-property-decorator';
 import { NodeRewards } from '../model/rewards';
 import AgentNodeServerCostsForm from './AgentNodeServerCostsForm.vue';
+import DateTimePickerDialogField from './DateTimePickerDialogField.vue';
+import DateTimePickerMenuField from './DateTimePickerMenuField.vue';
+
 import { balanceNumber } from '@/model/common';
 import { ServerCostsPrice } from '@/model/price';
 
 @Component({
   components: {
     AgentNodeServerCostsForm,
+    DateTimePickerDialogField,
+    DateTimePickerMenuField,
   },
 })
 export default class AngetNodeRewards extends Vue {
   @Prop() public nodeRewards!: NodeRewards;
 
-  public startDateMenu: any = null;
-  public endDateMenu: any = null;
   public serverCostsFormOpen: boolean = false;
 
   get startDate(): string {
-    return this.nodeRewards.paymentDateRange.startDate.format('YYYY-MM-DD');
+    return this.nodeRewards.paymentDateRange.startDate.format('YYYY-MM-DD HH:mm');
   }
 
   get endDate(): string {
-    return this.nodeRewards.paymentDateRange.endDate.format('YYYY-MM-DD');
+    return this.nodeRewards.paymentDateRange.endDate.format('YYYY-MM-DD HH:mm');
   }
 
   public openServerCostsForm() {
@@ -139,12 +104,10 @@ export default class AngetNodeRewards extends Vue {
   }
 
   public onStartDateChanged(value: string) {
-    (this.$refs.startDateMenu as any).save(value);
     this.$emit('startDateChanged', value);
   }
 
    public onEndDateChanged(value: string) {
-    (this.$refs.endDateMenu as any).save(value);
     this.$emit('endDateChanged', value);
   }
 }
