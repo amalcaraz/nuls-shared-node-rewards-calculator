@@ -68,6 +68,10 @@ export default class DateTimePicker extends Vue {
 
   public created() {
     this.selectedDatetime = this.value;
+    if (this.selectedDatetime) {
+      this.dateSelected = true;
+      this.timeSelected = true;
+    }
   }
 
   public get datePart(): string {
@@ -90,9 +94,6 @@ export default class DateTimePicker extends Vue {
   }
 
   public set timePart(value: string) {
-    if ((this.$refs.timePicker as any).selectingHour || (this.$refs.timePicker as any).selectingMinute) {
-      return;
-    }
     this.timeSelected = true;
 
     const time = moment(value, DEFAULT_TIME_FORMAT);
