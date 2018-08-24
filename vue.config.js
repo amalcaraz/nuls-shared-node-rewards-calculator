@@ -8,6 +8,8 @@ const configFileName = './config/config.json'
 const configPath = path.resolve(__dirname, configFileName);
 fs.writeFileSync(configPath, JSON.stringify(config))
 
+const manifestJSON = require("./public/manifest.json");
+
 module.exports = {
   devServer: {
     public: '0.0.0.0:8080'
@@ -17,7 +19,10 @@ module.exports = {
     workboxPluginMode: 'GenerateSW',
     workboxOptions: {
       skipWaiting: true
-    }
+    },
+    themeColor: manifestJSON.theme_color,
+    name: manifestJSON.short_name,
+    msTileColor: manifestJSON.background_color
   },
   baseUrl: config.app.metaBase,
   configureWebpack: {
