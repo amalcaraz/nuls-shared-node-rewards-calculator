@@ -129,9 +129,7 @@ export default class SelectNode extends Vue {
   }
 
   public async onStartDateChanged(startDate: string) {
-    this.startDate = moment(startDate)
-      .clone()
-      .startOf('day');
+    this.startDate = moment(startDate).clone();
 
     setTimeout(() => this.fetchRewards(), 500);
 
@@ -142,9 +140,7 @@ export default class SelectNode extends Vue {
   }
 
   public async onEndDateChanged(endDate: string) {
-    this.endDate = moment(endDate)
-      .clone()
-      .endOf('day');
+    this.endDate = moment(endDate).clone();
 
     setTimeout(() => this.fetchRewards(), 500);
 

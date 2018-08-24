@@ -15,7 +15,7 @@ export async function getNulsPrice(): Promise<NulsPriceResponse> {
 
 }
 
-export function calculateNulsPrice(currencyPrice: number, currency: ConfigCurrencyType, nulsPriceResponse: NulsPriceResponse): balanceNumber {
+export function calculateNulsPrice(currencyPrice: number, currency: ConfigCurrencyType, nulsPriceResponse?: NulsPriceResponse): balanceNumber {
 
   const currentPrice: number = currencyPrice ? currencyPrice : 0;
   let nulsPrice: balanceNumber = 0;

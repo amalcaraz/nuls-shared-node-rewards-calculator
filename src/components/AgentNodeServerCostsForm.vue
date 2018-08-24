@@ -28,7 +28,7 @@
       <v-card-actions>
         <v-btn color="error" flat @click.stop="onClose">Close</v-btn>
         <v-spacer></v-spacer>
-        <v-btn color="primary" @click.stop="onSubmit">Submit</v-btn>
+        <v-btn color="primary" @click.stop="onSubmit" :disabled="submitDisabled">Submit</v-btn>
       </v-card-actions>
     </v-card>
   </v-dialog>
@@ -55,6 +55,7 @@ export default class AgentNodeServerCostsForm extends Vue {
   public selectedCurrency: ConfigCurrencyType = {} as ConfigCurrencyType;
   public priceInCurrency: string = '';
   public priceInNuls: balanceNumber = 0;
+  public submitDisabled: boolean = false;
 
   private calculatePriceDebounced = debounce((price: string, currency: ConfigCurrencyType) => this.calculatePrice(price, currency), 500, false);
 
@@ -80,11 +81,13 @@ export default class AgentNodeServerCostsForm extends Vue {
 
   @Watch('selectedCurrency')
   public onSelectedCurrencyChange(val: string, oldVal: string) {
+    this.submitDisabled = true;
     this.calculatePrice(this.priceInCurrency, this.selectedCurrency);
   }
 
   @Watch('priceInCurrency')
   public onPriceChange(val: string, oldVal: string) {
+    this.submitDisabled = true;
     this.calculatePriceDebounced(this.priceInCurrency, this.selectedCurrency);
   }
 
@@ -100,8 +103,14 @@ export default class AgentNodeServerCostsForm extends Vue {
   }
 
   private async calculatePrice(price: string, currency: ConfigCurrencyType) {
-    const nulsPriceResponse: NulsPriceResponse = await priceService.getNulsPrice();
+    let nulsPriceResponse: NulsPriceResponse | undefined;
+
+    if (ConfigCurrencyType[currency] !== ConfigCurrencyType.NULS) {
+      nulsPriceResponse = await priceService.getNulsPrice();
+    }
+
     this.priceInNuls = await priceService.calculateNulsPrice(parseFloat(price), currency, nulsPriceResponse);
+    this.submitDisabled = false;
   }
 
   private getResponse(): ServerCostsPrice {
