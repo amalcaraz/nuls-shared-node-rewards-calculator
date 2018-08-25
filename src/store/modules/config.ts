@@ -18,7 +18,7 @@ function findNodeServerCostsById(nodes: ConfigNode[], id: agentNodeId): ConfigSe
 
 function findNodeStakersById(nodes: ConfigNode[], id: agentNodeId): ConfigStaker[] {
   const node: ConfigNode | undefined = findNodeConfigById(nodes, id);
-  return node
+  return node && node.stakers
     ? node.stakers
     : [];
 }
@@ -50,6 +50,17 @@ export default {
 
       state.config.nodes = [...state.config.nodes, ...newAgentNodes];
     },
+    updateNode(state: any, configNode: ConfigNode) {
+      const index: number = state.config.nodes.findIndex((storeNodeConfig: ConfigNode) => storeNodeConfig.agentNodeId === configNode.agentNodeId);
+      if (index !== -1) {
+        const storedConfigNode: ConfigNode = state.config.nodes[index];
+        const newConfigNode: ConfigNode = {
+          ...storedConfigNode,
+          ...configNode,
+        };
+        Vue.set(state.config.nodes, index, newConfigNode);
+      }
+    },
     removeNode(state: any, nodes: ConfigNode | ConfigNode[]) {
       const removeAgentNodes = [].concat.call([], nodes);
       const result = state.config.nodes
@@ -63,19 +74,21 @@ export default {
         if (!Array.isArray(node.stakers)) {
           Vue.set(node, 'stakers', []);
         }
-        node.stakers.push(staker);
+        (node.stakers as ConfigStaker[]).push(staker);
       }
     },
     updateStaker(state: any, { id, staker }: { id: agentNodeId, staker: ConfigStaker }) {
       const node: ConfigNode | undefined = findNodeConfigById(state.config.nodes, id);
-      if (node) {
+      if (node && node.stakers) {
         const index: number = node.stakers.findIndex((storedStaker: ConfigStaker) => storedStaker.address === staker.address);
-        Vue.set(node.stakers, index, staker);
+        if (index !== -1) {
+          Vue.set(node.stakers, index, staker);
+        }
       }
     },
     deleteStaker(state: any, { id, staker }: { id: agentNodeId, staker: ConfigStaker }) {
       const node: ConfigNode | undefined = findNodeConfigById(state.config.nodes, id);
-      if (node) {
+      if (node && node.stakers) {
         const index: number = node.stakers.indexOf(staker);
         node.stakers.splice(index, 1);
       }
@@ -87,6 +100,10 @@ export default {
   actions: {
     addNode({ commit, dispatch }: any, node: ConfigNode | ConfigNode[]) {
       commit('addNode', node);
+      dispatch('storeConfig');
+    },
+    updateNode({ commit, dispatch }: any, node: ConfigNode) {
+      commit('updateNode', node);
       dispatch('storeConfig');
     },
     removeNode({ commit, dispatch }: any, node: ConfigNode | ConfigNode[]) {

@@ -18,10 +18,10 @@ import { ConfigNode } from '@/model/config';
     ...mapGetters('consensus', ['allAgentNodes']),
   },
 })
-export default class AddNode extends Vue {
+export default class AddNodeView extends Vue {
   public onNodeSelected(node: ConsensusAgentNode) {
     this.$store.dispatch('config/addNode', { agentNodeId: node.agentId } as ConfigNode);
-    this.$router.push({name: 'home'});
+    this.$router.push({ name: 'config-node', params: { hash: node.agentHash } });
   }
 }
 </script>

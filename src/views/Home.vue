@@ -32,7 +32,7 @@ import { ConfigNode } from '@/model/config';
     ...mapGetters('consensus', ['allAgentNodes']),
   },
 })
-export default class Home extends Vue {
+export default class HomeView extends Vue {
   private allNodes!: ConfigNode[];
   private allAgentNodes!: ConsensusAgentNode[];
 

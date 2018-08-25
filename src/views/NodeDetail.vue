@@ -12,7 +12,6 @@
             <agent-node-rewards :nodeRewards="currentNodeRewards"
                                 @startDateChanged="onStartDateChanged"
                                 @endDateChanged="onEndDateChanged"
-                                @serverCostsChanged="onServerCostsChanged"
             ></agent-node-rewards>
           </v-flex>
         </v-layout>
@@ -56,7 +55,7 @@ import { NodeStaker } from '@/model/stakers';
     AgentNodeStakers,
   },
 })
-export default class SelectNode extends Vue {
+export default class SelectNodeView extends Vue {
 
   public startDate: Moment | null = null;
   public endDate: Moment | null = null;
@@ -116,15 +115,6 @@ export default class SelectNode extends Vue {
   public async created() {
     this.initNodeConfig();
     this.fetchRewards();
-    this.fetchServerCosts();
-  }
-
-  public onServerCostsChanged(price: ServerCostsPrice) {
-    const serverCosts: ConfigServerCosts = {
-      currency: price.currency,
-      price: price.price,
-    };
-    this.$store.dispatch('config/updateServerCosts', { id: this.currentAgentNode.agentId , serverCosts });
     this.fetchServerCosts();
   }
 

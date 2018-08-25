@@ -3,13 +3,32 @@
     <v-toolbar app fixed clipped-left class="pa-0">
       <v-container class="py-0 app-toolbar__container">
         <v-layout align-center>
-            <v-btn flat icon :to="{name: 'home'}" color="transparent" :ripple="false">
-              <i id="nuls-logo" class="nuls primary--text"></i>
+          <v-btn flat icon :to="{name: 'home'}" color="transparent" :ripple="false">
+            <i id="nuls-logo" class="nuls primary--text"></i>
+          </v-btn>
+          <v-toolbar-title class="app-title">
+            <template v-if="routeTitle">{{routeTitle}}</template>
+            <template v-else>Shared node rewards calculator</template>
+          </v-toolbar-title>
+          <v-spacer></v-spacer>
+
+          <v-menu bottom left nudge-bottom="40" v-if="$route.meta.menu">
+            <v-btn
+              slot="activator"
+              dark
+              icon>
+              <v-icon>more_vert</v-icon>
             </v-btn>
-            <v-toolbar-title class="app-title">
-              <template v-if="routeTitle">{{routeTitle}}</template>
-              <template v-else>Shared node rewards calculator</template>
-            </v-toolbar-title>
+
+            <v-list>
+              <v-list-tile v-for="(item, i) in $route.meta.menu"
+                           :key="i"
+                           :to="item.to">
+                <v-list-tile-avatar v-if="item.icon"><v-icon v-if="item.icon">{{item.icon}}</v-icon></v-list-tile-avatar>
+                <v-list-tile-title>{{ item.label }}</v-list-tile-title>
+              </v-list-tile>
+            </v-list>
+          </v-menu>
         </v-layout>
       </v-container>
     </v-toolbar>

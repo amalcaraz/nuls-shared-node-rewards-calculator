@@ -1,37 +1,43 @@
 <template>
-  <v-dialog v-model="isOpen" persistent max-width="500px">
-    <v-card>
-      <v-card-title class="title">
-        Server costs
-      </v-card-title>
-      <v-card-text>
-        <v-select
-          :items="currencies"
-          v-model="selectedCurrency"
-          label="Currency"
-          item-value="text"
-        ></v-select>
-        <v-text-field
-          :label="'Price in ' + selectedCurrency"
-          v-model="priceInCurrency"
-          type="number"
-        ></v-text-field>
-        <v-text-field
-          v-show="selectedCurrency !== ConfigCurrencyType.NULS"
-          label="Price in Nuls"
-          :value="priceInNuls | nulsCurrency"
-          type="text"
-          :disabled="!priceInNuls"
-          readonly
-        ></v-text-field>
-      </v-card-text>
-      <v-card-actions>
-        <v-btn color="error" flat @click.stop="onClose">Close</v-btn>
-        <v-spacer></v-spacer>
-        <v-btn color="primary" @click.stop="onSubmit" :disabled="submitDisabled">Submit</v-btn>
-      </v-card-actions>
-    </v-card>
-  </v-dialog>
+  <v-card>
+    <v-card-title class="title">
+      Server costs
+    </v-card-title>
+    <v-card-text>
+      <v-select
+        :items="currencies"
+        v-model="selectedCurrency"
+        label="Currency"
+        item-value="text"
+      ></v-select>
+      <v-text-field
+        :label="'Price in ' + selectedCurrency"
+        v-model="priceInCurrency"
+        type="number"
+      ></v-text-field>
+      <v-layout align-center>
+        <v-flex v-show="loading" shrink class="pr-2">
+          <v-progress-circular indeterminate color="primary"></v-progress-circular>
+        </v-flex>
+        <v-flex>
+          <v-text-field
+            v-show="selectedCurrency !== ConfigCurrencyType.NULS"
+            label="Price in Nuls"
+            :value="priceInNuls | nulsCurrency"
+            type="text"
+            :disabled="!priceInNuls"
+            readonly
+          ></v-text-field>
+        </v-flex>
+      </v-layout>
+     
+    </v-card-text>
+    <v-card-actions>
+      <v-btn color="error" flat @click.stop="onCancel">Cancel</v-btn>
+      <v-spacer></v-spacer>
+      <v-btn color="primary" @click.stop="onSubmit" :disabled="submitDisabled">Save</v-btn>
+    </v-card-actions>
+  </v-card>
 </template>
 
 <script lang="ts">
@@ -46,18 +52,16 @@ import { nulsDecimalsToInt } from '../services/utils';
 
 @Component({})
 export default class AgentNodeServerCostsForm extends Vue {
-  @Prop() public open!: boolean;
   @Prop() public serverCosts!: ServerCostsPrice;
 
-  public isOpen: boolean = false;
   public ConfigCurrencyType = ConfigCurrencyType;
   public currencies: string[] = Object.keys(ConfigCurrencyType);
-  public selectedCurrency: ConfigCurrencyType = {} as ConfigCurrencyType;
+  public selectedCurrency: ConfigCurrencyType = this.currencies[0] as ConfigCurrencyType;
   public priceInCurrency: string = '';
   public priceInNuls: balanceNumber = 0;
-  public submitDisabled: boolean = false;
+  public loading: boolean = false;
 
-  private calculatePriceDebounced = debounce((price: string, currency: ConfigCurrencyType) => this.calculatePrice(price, currency), 500, false);
+  private calculatePriceDebounced = debounce(() => this.calculatePrice(), 500, false);
 
   @Watch('serverCosts', { immediate: true })
   public onServerCostsChange(val: ServerCostsPrice, oldVal: ServerCostsPrice) {
@@ -72,53 +76,66 @@ export default class AgentNodeServerCostsForm extends Vue {
     this.priceInNuls = this.serverCosts && this.serverCosts.nulsPrice
       ? this.serverCosts.nulsPrice
       : 0;
-  }
 
-  @Watch('open', { immediate: true })
-  public onOpenChange(val: boolean, oldVal: boolean) {
-    this.isOpen = val;
+    this.calculatePrice();
+
   }
 
   @Watch('selectedCurrency')
   public onSelectedCurrencyChange(val: string, oldVal: string) {
-    this.submitDisabled = true;
-    this.calculatePrice(this.priceInCurrency, this.selectedCurrency);
+    this.calculatePrice();
   }
 
   @Watch('priceInCurrency')
   public onPriceChange(val: string, oldVal: string) {
-    this.submitDisabled = true;
-    this.calculatePriceDebounced(this.priceInCurrency, this.selectedCurrency);
+    this.calculatePriceDebounced();
   }
 
-  public onClose() {
-    this.isOpen = false;
-    this.$emit('update:open', false);
-    this.$emit('close');
+  get submitDisabled(): boolean {
+    return !this.selectedCurrency || !this.priceInCurrency || (parseFloat(this.priceInCurrency) < 0);
+  }
+
+  public onCancel() {
+    this.$emit('cancel');
   }
 
    public onSubmit() {
     this.$emit('serverCosts', this.getResponse());
-    this.onClose();
   }
 
-  private async calculatePrice(price: string, currency: ConfigCurrencyType) {
-    let nulsPriceResponse: NulsPriceResponse | undefined;
+  private async calculatePrice() {
 
-    if (ConfigCurrencyType[currency] !== ConfigCurrencyType.NULS) {
-      nulsPriceResponse = await priceService.getNulsPrice();
+    const priceInCurrency: number = parseFloat(this.priceInCurrency);
+
+    if (priceInCurrency > 0) {
+      this.loading = true;
+
+      let nulsPriceResponse: NulsPriceResponse | undefined;
+
+      if (ConfigCurrencyType[this.selectedCurrency] !== ConfigCurrencyType.NULS) {
+        nulsPriceResponse = await priceService.getNulsPrice();
+      }
+
+      this.priceInNuls = await priceService.calculateNulsPrice(priceInCurrency, this.selectedCurrency, nulsPriceResponse);
+
+      this.loading = false;
     }
 
-    this.priceInNuls = await priceService.calculateNulsPrice(parseFloat(price), currency, nulsPriceResponse);
-    this.submitDisabled = false;
   }
 
-  private getResponse(): ServerCostsPrice {
-    return {
-      currency: this.selectedCurrency,
-      price: parseFloat(this.priceInCurrency),
-      nulsPrice: this.priceInNuls,
-    };
+  private getResponse(): ServerCostsPrice | null {
+
+    const priceInCurrency: number = parseFloat(this.priceInCurrency);
+
+    if (priceInCurrency > 0) {
+      return {
+        currency: this.selectedCurrency,
+        price: priceInCurrency,
+        nulsPrice: this.priceInNuls,
+      };
+    } else {
+      return null;
+    }
   }
 
 }

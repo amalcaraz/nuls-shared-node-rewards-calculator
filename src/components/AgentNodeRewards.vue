@@ -46,8 +46,8 @@
                   <div>Total rewards to share:</div>
                 </v-flex>
                 <v-flex grow class="text-xs-right">
-                  <div class="error--text server-costs">
-                    <strong class="editable" @click="openServerCostsForm">{{nodeRewards.serverCosts.nulsPrice | nulsCurrency}} <i class="nuls"></i></strong>
+                  <div class="error--text">
+                    <strong>{{nodeRewards.serverCosts.nulsPrice | nulsCurrency}} <i class="nuls"></i></strong>
                   </div>
                   <div class="primary--text">
                     <strong>{{nodeRewards.totalToShare | nulsCurrency}} <i class="nuls"></i></strong>
@@ -59,16 +59,12 @@
         </v-flex>
       </v-layout>      
     </v-card-text>
-    <agent-node-server-costs-form :open.sync="serverCostsFormOpen"
-                                :serverCosts="nodeRewards.serverCosts"
-                                @serverCosts="onServerCosts"></agent-node-server-costs-form>
   </v-card>
 </template>
 
 <script lang="ts">
 import { Component, Vue, Prop } from 'vue-property-decorator';
 import { NodeRewards } from '../model/rewards';
-import AgentNodeServerCostsForm from './AgentNodeServerCostsForm.vue';
 import DateTimePickerDialogField from './DateTimePickerDialogField.vue';
 import DateTimePickerMenuField from './DateTimePickerMenuField.vue';
 
@@ -77,7 +73,6 @@ import { ServerCostsPrice } from '@/model/price';
 
 @Component({
   components: {
-    AgentNodeServerCostsForm,
     DateTimePickerDialogField,
     DateTimePickerMenuField,
   },
@@ -85,22 +80,12 @@ import { ServerCostsPrice } from '@/model/price';
 export default class AngetNodeRewards extends Vue {
   @Prop() public nodeRewards!: NodeRewards;
 
-  public serverCostsFormOpen: boolean = false;
-
   get startDate(): string {
     return this.nodeRewards.paymentDateRange.startDate.format('YYYY-MM-DD HH:mm');
   }
 
   get endDate(): string {
     return this.nodeRewards.paymentDateRange.endDate.format('YYYY-MM-DD HH:mm');
-  }
-
-  public openServerCostsForm() {
-    this.serverCostsFormOpen = true;
-  }
-
-  public onServerCosts(price: ServerCostsPrice) {
-    this.$emit('serverCostsChanged', price);
   }
 
   public onStartDateChanged(value: string) {
