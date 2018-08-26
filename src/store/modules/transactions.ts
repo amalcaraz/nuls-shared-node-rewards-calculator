@@ -8,6 +8,7 @@ import {
   TransactionInput,
   TransactionOutput,
 } from '../../model/transactions';
+import { enhancedGetters } from 'vuex-strong-cache';
 
 
 function filterTransactionsByAddress(txs: Transaction[], addr: address): Transaction[] {
@@ -69,7 +70,7 @@ export default {
     lastHeight: -1,
     txs: new Array<Transaction>(),
   },
-  getters: {
+  getters: enhancedGetters({
     lastHeight: (state: any) => state.lastHeight,
     txsByAddress: (state: any) => (addr: address) => filterTransactionsByAddress(state.txs, addr),
     txsByFrom: (state: any) => (addr: address) => filterTransactionsByFrom(state.txs, addr),
@@ -77,7 +78,7 @@ export default {
     txsByType: (state: any) => (type: TransactionType) => filterTransactionsByType(state.txs, type),
     txsByDateRange: (state: any) => (startDate: number, endDate: number) => filterTransactionsByDateRange(state.txs, startDate, endDate),
     txsByFilters: (state: any) => (filters: TransactionsFilters) => filterTransactionsByFilters(state.txs, filters),
-  },
+  }),
   mutations: {
     updateLastHeight(state: any, height: number) {
       if (height > state.lastHeight) {

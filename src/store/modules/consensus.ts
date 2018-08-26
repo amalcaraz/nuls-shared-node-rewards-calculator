@@ -2,6 +2,7 @@ import { ConsensusSummary, ConsensusResponse, ConsensusListFilters } from './../
 import * as consensusService from '../../services/consensus';
 import { ConsensusAgentNode, agentHash } from '@/model/consensus';
 import { blockHeight } from '../../model/common';
+import { enhancedGetters } from 'vuex-strong-cache';
 
 // tslint:disable-next-line:max-line-length
 function filterConsensusListByHeightRange(consensusList: ConsensusResponse[], startHeight: blockHeight = 0, endHeight: blockHeight = Number.MAX_SAFE_INTEGER): ConsensusResponse[] {
@@ -29,7 +30,7 @@ export default {
     agentNodes: new Array<ConsensusAgentNode>(),
     consensusList: new Array<ConsensusResponse>(),
   },
-  getters: {
+  getters: enhancedGetters({
     summary: (state: any) => state.summary,
     allConsensusList: (state: any) => state.consensusList,
     consensusListByHeightRange: (state: any) =>
@@ -37,7 +38,7 @@ export default {
     consensusListByFilters: (state: any) => (filters: ConsensusListFilters) => filterConsensusListByFilters(state.consensusList, filters),
     allAgentNodes: (state: any) => state.agentNodes,
     agentNodeByHash: (state: any) => (nodeHash: agentHash) => state.agentNodes.find((agentNode: ConsensusAgentNode) => agentNode.agentHash === nodeHash),
-  },
+  }),
   mutations: {
     updateSummary(state: any, { summary }: { summary: ConsensusSummary }) {
 

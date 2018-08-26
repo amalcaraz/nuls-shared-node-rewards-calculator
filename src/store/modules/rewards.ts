@@ -10,11 +10,12 @@ import { calculateNulsPrice } from '@/services/price';
 import { ConfigServerCosts } from '@/model/config';
 import { ServerCostsPrice } from '../../model/price';
 import config from 'config';
+import { enhancedGetters } from 'vuex-strong-cache';
 
 
 export default {
   namespaced: true,
-  getters: {
+  getters: enhancedGetters({
     agentNodeRewardsByDateRange: (state: any, getters: any, rootState: any, rootGetters: any) =>
       (node: ConsensusAgentNode, startDate: number, endDate: number): balanceNumber => {
 
@@ -85,7 +86,7 @@ export default {
         };
 
       },
-  },
+  }),
   actions: {
     async fetchNodeRewards({ dispatch }: any, filters: NodeRewardsFilters) {
 

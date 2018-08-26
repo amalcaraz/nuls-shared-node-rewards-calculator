@@ -3,6 +3,7 @@ import { ConfigNode, Config } from '@/model/config';
 import { agentNodeId } from '@/model/common';
 import { ConfigStaker, ConfigServerCosts } from '../../model/config';
 import Vue from 'vue';
+import { enhancedGetters } from 'vuex-strong-cache';
 
 function clearNullObjectProps(obj: any): any {
   const result: any = Array.isArray(obj)
@@ -48,12 +49,12 @@ export default {
       nodes: new Array<ConfigNode>(),
     } as Config,
   },
-  getters: {
+  getters: enhancedGetters({
     allNodes: (state: any) => state.config.nodes,
     serverCosts: (state: any) => (id: agentNodeId) => findNodeServerCostsById(state.config.nodes, id),
     stakers: (state: any) => (id: agentNodeId) => findNodeStakersById(state.config.nodes, id),
     nodeConfig: (state: any) => (id: agentNodeId) => findNodeConfigById(state.config.nodes, id),
-  },
+  }),
   mutations: {
     updateServerCosts(state: any, { id, serverCosts }: { id: agentNodeId, serverCosts: ConfigServerCosts }) {
       const node: ConfigNode | undefined = findNodeConfigById(state.config.nodes, id);

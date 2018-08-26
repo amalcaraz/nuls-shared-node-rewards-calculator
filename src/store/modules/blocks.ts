@@ -3,6 +3,7 @@ import * as blocksService from '../../services/blocks';
 import { address } from '@/model/common';
 import { BlocksFilters, Block } from '@/model/blocks';
 import { BlockList } from '../../model/blocks';
+import { enhancedGetters } from 'vuex-strong-cache';
 
 function filterBlocksByProducer(blocks: Block[], producer: address): Block[] {
   return blocks.filter((block: Block) => block.packingAddress === producer);
@@ -46,12 +47,12 @@ export default {
   state: {
     blocks: new Array<Block>(),
   },
-  getters: {
+  getters: enhancedGetters({
     blocksByProducer: (state: any) => (producer: address) => filterBlocksByProducer(state.blocks, producer),
     blocksByHeightRange: (state: any) => (startHeight: blockHeight, endHeight: blockHeight) => filterBlocksByHeightRange(state.blocks, startHeight, endHeight),
     blocksByDateRange: (state: any) => (startDate: number, endDate: number) => filterBlocksByDateRange(state.blocks, startDate, endDate),
     blocksByFilters: (state: any) => (filters: BlocksFilters) => filterBlocksByFilters(state.blocks, filters),
-  },
+  }),
   mutations: {
     addBlocks(state: any, blocks: Block | Block[]) {
 
