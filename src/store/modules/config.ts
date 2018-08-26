@@ -5,12 +5,17 @@ import { ConfigStaker, ConfigServerCosts } from '../../model/config';
 import Vue from 'vue';
 
 function clearNullObjectProps(obj: any): any {
-  const result: any = { ...obj };
+  const result: any = Array.isArray(obj)
+    ? [...obj]
+    : { ...obj };
 
-  for (const i in obj) {
+  for (const i in result) {
     if (result[i] === null || result[i] === undefined) {
+      if (Array.isArray(result)) {
+        result.splice(+i, 1);
+      }
       delete result[i];
-    } else if (typeof result[i] === 'object') {
+    } else if (typeof result[i] === 'object' || Array.isArray(result[i])) {
       result[i] = clearNullObjectProps(result[i]);
     }
   }

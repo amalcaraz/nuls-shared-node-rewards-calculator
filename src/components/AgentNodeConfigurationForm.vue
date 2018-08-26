@@ -3,7 +3,7 @@
     <v-container fluid class="pa-0">
       <v-layout>
         <v-flex>
-          <h1>Node <span class="primary--text">{{agentNode.agentName ? agentNode.agentName : agentNode.agentAddress}}</span></h1>
+          <h1 class="long-text">Node <span class="primary--text">{{agentNode.agentName ? agentNode.agentName : agentNode.agentAddress}}</span></h1>
 
           <v-divider class="my-4"></v-divider>
 
@@ -47,7 +47,7 @@
         </v-flex>        
       </v-layout>
       <v-layout>
-        <v-btn color="error" flat @click="onCancel">Cancel</v-btn>
+        <v-btn color="error" flat @click="onCancel" :disabled="!agentConfig">Cancel</v-btn>
         <v-spacer></v-spacer>
         <v-btn color="primary" type="submit" :disabled="!valid">Save config</v-btn>
       </v-layout>
@@ -202,29 +202,13 @@ export default class AgentNodeConfigurationForm extends Vue {
   }
 
   private getResponse(): ConfigNode {
-    // const configNode: ConfigNode = {
-    //   ...this.agentConfig,
-    //   configType: this.selectedConfigType,
-    // };
-
-    // if (this.switchServerCosts && this.serverCostsModel) {
-    //   configNode.serverCosts = this.serverCostsModel;
-    // }
-
-    // if (this.switchOwnerStaking) {
-    //   configNode.ownerStaking = this.switchOwnerStaking;
-    // }
-
-    // if (this.switchReimburseFees && this.reimburseFeesModel) {
-    //   configNode.reimburseFees = this.reimburseFeesModel;
-    // }
-
-    const configNode: any = {
+    const configNode: ConfigNode = {
       ...this.agentConfig,
-      configType: this.selectedConfigType,
-      serverCosts: this.serverCostsModel,
-      ownerStaking: this.switchOwnerStaking,
-      reimburseFees: this.reimburseFeesModel,
+      agentNodeId: this.agentConfig ? this.agentConfig.agentNodeId : this.agentNode.agentId,
+      configType: this.selectedConfigType !== null ? this.selectedConfigType : undefined,
+      serverCosts: this.serverCostsModel !== null ? this.serverCostsModel : undefined,
+      ownerStaking: this.switchOwnerStaking !== null ? this.switchOwnerStaking : undefined,
+      reimburseFees: this.reimburseFeesModel !== null ? this.reimburseFeesModel : undefined,
     };
 
     return configNode;

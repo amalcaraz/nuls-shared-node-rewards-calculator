@@ -21,6 +21,11 @@ section {
   }
 }
 
+.long-text {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
 i.nuls {
   display: inline-block;
   height: 0.8em;

@@ -31,7 +31,11 @@ export default class ConfigNodeView extends Vue {
   }
 
   public onSubmit(configNode: ConfigNode) {
-    this.$store.dispatch('config/updateNode', configNode);
+    if (this.currentAgentNodeConfig) {
+      this.$store.dispatch('config/updateNode', configNode);
+    } else {
+      this.$store.dispatch('config/addNode', configNode);
+    }
     this.$router.push({ name: 'node-detail', params: { hash: this.currentAgentNode.agentHash } });
   }
 

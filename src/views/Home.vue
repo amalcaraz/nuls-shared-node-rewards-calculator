@@ -49,7 +49,6 @@ export default class HomeView extends Vue {
   }
 
   public onNodeRemoved(node: ConsensusAgentNode) {
-    debugger
     this.$store.dispatch('config/removeNode', { agentNodeId: node.agentId } as ConfigNode);
   }
 
