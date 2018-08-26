@@ -4,6 +4,19 @@ import { agentNodeId } from '@/model/common';
 import { ConfigStaker, ConfigServerCosts } from '../../model/config';
 import Vue from 'vue';
 
+function clearNullObjectProps(obj: any): any {
+  const result: any = { ...obj };
+
+  for (const i in obj) {
+    if (result[i] === null || result[i] === undefined) {
+      delete result[i];
+    } else if (typeof result[i] === 'object') {
+      result[i] = clearNullObjectProps(result[i]);
+    }
+  }
+
+  return result;
+}
 
 function findNodeConfigById(nodes: ConfigNode[], id: agentNodeId): ConfigNode | undefined {
   return nodes.find((node: ConfigNode) => node.agentNodeId === id);
@@ -130,7 +143,7 @@ export default {
       if (localStorage) {
         const key: string = config.app.localStoreKey;
         state
-          ? localStorage.setItem(key, JSON.stringify(state.config))
+          ? localStorage.setItem(key, JSON.stringify(clearNullObjectProps(state.config)))
           : localStorage.removeItem(key);
       }
     },
