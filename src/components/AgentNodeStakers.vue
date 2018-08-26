@@ -9,10 +9,10 @@
     >
       <template slot="items" slot-scope="props">
         <td class="text-xs-left">{{ props.item.address }}</td>
-        <td class="text-xs-left digit">{{ props.item.staked | nulsCurrency}} <i class="nuls"></i></td>
+        <td class="text-xs-right digit">{{ props.item.staked | nulsCurrency}} <i class="nuls"></i></td>
         <td class="text-xs-left">{{ props.item.alias }}</td>
         <td class="text-xs-left">{{ props.item.email }}</td>
-        <td class="text-xs-left digit success--text">
+        <td class="text-xs-right digit success--text">
           <strong>{{ props.item.totalRewards | nulsCurrency }} <i class="nuls"></i></strong>
         </td>
         <td class="justify-center layout px-0">
@@ -25,11 +25,12 @@
       </template>
       <template slot="footer">
         <td class="text-xs-right" colspan="1">Total staked:</td>
-        <td class="text-xs-left digit" colspan="1">{{totalStaked | nulsCurrency}} <i class="nuls"></i></td>
+        <td class="text-xs-right digit" colspan="1">{{totalStaked | nulsCurrency}} <i class="nuls"></i></td>
         <td class="text-xs-right" colspan="2">Total rewards:</td>
-        <td class="text-xs-left digit success--text" colspan="2">
+        <td class="text-xs-right digit success--text" colspan="1">
           <strong>{{nodeRewards.totalToShare | nulsCurrency}} <i class="nuls"></i></strong>
         </td>
+        <td colspan="1"></td>
       </template>
     </v-data-table>
     <v-dialog v-model="stakerFormOpen" persistent max-width="500px">
