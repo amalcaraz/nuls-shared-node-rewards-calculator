@@ -18,42 +18,34 @@
       </v-layout>
       <v-layout>
         <v-flex xs12 class="pt-0">
-          <v-layout wrap>
-            <v-flex xs12 sm4 md6 lg4>
-              <v-layout>
-                <v-flex shrink>
-                  <div>Node balance:</div>
-                  <div>Total rewards:</div>
-                  <div>Owner staking rewards:</div>
-                </v-flex>
-                <v-flex grow class="text-xs-right">
-                  <div class="grey--text">
-                    <strong>{{nodeRewards.nodeBalance | nulsCurrency}} <i class="nuls"></i></strong>
-                  </div>
-                  <div class="secondary--text">
-                    <strong>{{nodeRewards.totalRewards | nulsCurrency}} <i class="nuls"></i></strong>
-                  </div>
-                  <div class="secondary--text">
-                    <strong>{{nodeRewards.stakingRewards | nulsCurrency}} <i class="nuls"></i></strong>
-                  </div>
-                </v-flex>
-              </v-layout>
+          <v-layout align-end>
+            <v-flex shrink class="py-0"><div>Node balance:</div></v-flex>
+            <v-flex grow class="text-xs-right py-0">
+              <div class="grey--text"><strong>{{nodeRewards.nodeBalance | nulsCurrency(8)}} <i class="nuls"></i></strong></div>
             </v-flex>
-            <v-flex xs12 sm4 md6 lg4>
-              <v-layout>
-                <v-flex shrink>
-                  <div>Server maintenance costs:</div>
-                  <div>Total rewards to share:</div>
-                </v-flex>
-                <v-flex grow class="text-xs-right">
-                  <div class="error--text">
-                    <strong>{{nodeRewards.serverCosts.nulsPrice | nulsCurrency}} <i class="nuls"></i></strong>
-                  </div>
-                  <div class="primary--text">
-                    <strong>{{nodeRewards.totalToShare | nulsCurrency}} <i class="nuls"></i></strong>
-                  </div>
-                </v-flex>
-              </v-layout>
+          </v-layout>
+          <v-layout align-end>
+            <v-flex shrink class="py-0"><div>Total rewards:</div></v-flex>
+            <v-flex grow class="text-xs-right py-0">
+              <div class="secondary--text"><strong>{{nodeRewards.totalRewards | nulsCurrency(8)}} <i class="nuls"></i></strong></div>
+            </v-flex>
+          </v-layout>
+          <v-layout align-end v-if="nodeRewards.stakingRewards >= 0">
+            <v-flex shrink class="py-0"><div>Owner staking rewards:</div></v-flex>
+            <v-flex grow class="text-xs-right py-0">
+              <div class="secondary--text"><strong>{{nodeRewards.stakingRewards | nulsCurrency(8)}} <i class="nuls"></i></strong></div>
+            </v-flex>
+          </v-layout>
+          <v-layout align-end v-if="nodeRewards.serverCosts">
+            <v-flex shrink class="py-0"><div>Server maintenance costs:</div></v-flex>
+            <v-flex grow class="text-xs-right py-0">
+              <div class="error--text"><strong>{{nodeRewards.serverCosts.nulsPrice | nulsCurrency(8)}} <i class="nuls"></i></strong></div>
+            </v-flex>
+          </v-layout>
+          <v-layout align-end>
+            <v-flex shrink class="py-0"><div>Total rewards to share:</div></v-flex>
+            <v-flex grow class="text-xs-right py-0">
+              <div class="primary--text"><strong>{{nodeRewards.totalToShare | nulsCurrency(8)}} <i class="nuls"></i></strong></div>
             </v-flex>
           </v-layout>
         </v-flex>

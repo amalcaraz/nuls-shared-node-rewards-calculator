@@ -2,7 +2,7 @@
   <div class="agent-node-stakers">
     <v-data-table
       :headers="headers"
-      :items="stakersWithRewards"
+      :items="nodeStakers"
       item-key="address"
       hide-actions
       class="elevation-1"
@@ -28,7 +28,7 @@
         <td class="text-xs-right digit" colspan="1">{{totalStaked | nulsCurrency}} <i class="nuls"></i></td>
         <td class="text-xs-right" colspan="2">Total rewards:</td>
         <td class="text-xs-right digit success--text" colspan="1">
-          <strong>{{nodeRewards.totalToShare | nulsCurrency}} <i class="nuls"></i></strong>
+          <strong>{{totalRewards | nulsCurrency}} <i class="nuls"></i></strong>
         </td>
         <td colspan="1"></td>
       </template>
@@ -46,7 +46,7 @@
 
 <script lang="ts">
 import { Component, Vue, Prop } from 'vue-property-decorator';
-import { NodeStaker } from '../model/stakers';
+import { NodeFixedStaker } from '../model/stakers';
 import { NodeRewards } from '../model/rewards';
 import AgentNodeStakerForm from './AgentNodeStakerForm.vue';
 import { balanceNumber } from '@/model/common';
@@ -57,35 +57,29 @@ import { balanceNumber } from '@/model/common';
   },
 })
 export default class AgentNodeStakers extends Vue {
-  @Prop() public nodeStakers!: NodeStaker[];
-  @Prop() public nodeRewards!: NodeRewards;
+  @Prop() public nodeStakers!: NodeFixedStaker[];
 
   public stakerFormOpen: boolean = false;
-  public selectedStaker: NodeStaker | null = null;
+  public selectedStaker: NodeFixedStaker | null = null;
 
   public headers: any[] = [
     { text: 'Address', value: 'address', sortable: true, align: 'left' },
-    { text: 'Staked', value: 'staked', sortable: true, align: 'left' },
+    { text: 'Staked', value: 'staked', sortable: true, align: 'right' },
     { text: 'Alias', value: 'alias', sortable: true, align: 'left' },
     { text: 'Email', value: 'email', sortable: true, align: 'left' },
-    { text: 'Rewards', value: 'totalRewards', sortable: true, align: 'left' },
+    { text: 'Rewards', value: 'totalRewards', sortable: true, align: 'right' },
     { text: 'Actions', value: 'actions', sortable: false, align: 'left' },
   ];
 
-  get stakersWithRewards(): NodeStaker[] {
-    return this.nodeStakers
-      ? this.nodeStakers.map((staker: NodeStaker) => {
-        staker.totalRewards = (staker.staked / this.totalStaked) * this.nodeRewards.totalToShare;
-        return staker;
-      })
-      : [];
+  get totalStaked(): number {
+    return this.nodeStakers ? this.nodeStakers.reduce((prev: balanceNumber, curr: NodeFixedStaker) => prev + curr.staked, 0) : 0;
   }
 
-  get totalStaked(): balanceNumber {
-    return this.nodeStakers ? this.nodeStakers.reduce((prev: balanceNumber, curr: NodeStaker) => prev + curr.staked, 0) : 0;
+  get totalRewards(): balanceNumber {
+    return this.nodeStakers ? this.nodeStakers.reduce((prev: balanceNumber, curr: NodeFixedStaker) => prev + curr.totalRewards, 0) : 0;
   }
 
-  public onOpenNewStakerForm(staker: NodeStaker | null) {
+  public onOpenNewStakerForm(staker: NodeFixedStaker | null) {
     this.selectedStaker = staker;
     this.stakerFormOpen = true;
   }
@@ -95,7 +89,7 @@ export default class AgentNodeStakers extends Vue {
     this.stakerFormOpen = false;
   }
 
-  public onStakerReceived(staker: NodeStaker) {
+  public onStakerReceived(staker: NodeFixedStaker) {
     if (!this.selectedStaker) {
       this.$emit('newStaker', staker);
     } else {
@@ -104,12 +98,12 @@ export default class AgentNodeStakers extends Vue {
     this.onCancelForm();
   }
 
-  public onDeleteStaker(staker: NodeStaker) {
+  public onDeleteStaker(staker: NodeFixedStaker) {
     this.$emit('deleteStaker', staker);
     this.onCancelForm();
   }
 
-  public onUpdateStaker(staker: NodeStaker) {
+  public onUpdateStaker(staker: NodeFixedStaker) {
     this.$emit('deleteStaker', staker);
     this.onCancelForm();
   }

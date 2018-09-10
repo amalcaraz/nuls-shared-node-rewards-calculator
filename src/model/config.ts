@@ -29,9 +29,9 @@ export interface ConfigServerCosts {
 
 export interface ConfigStaker {
   address: address;
+  staked?: balanceNumber;
   alias?: string;
   email?: string;
-  staked: balanceNumber;
 }
 
 export enum ConfigType {

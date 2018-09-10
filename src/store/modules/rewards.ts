@@ -1,5 +1,5 @@
 import { NulsPriceResponse } from './../../model/price';
-import { balanceNumber } from '../../model/common';
+import { balanceNumber, address } from '../../model/common';
 import { ConsensusResponse } from './../../model/consensus';
 import { ConsensusAgentNode, ConsensusListFilters } from '@/model/consensus';
 import { TransactionsFilters, TransactionType, Transaction, TransactionOutput } from '@/model/transactions';
@@ -86,6 +86,27 @@ export default {
         };
 
       },
+    stakersAutoRewards: (state: any, getters: any, rootState: any, rootGetters: any) =>
+      (node: ConsensusAgentNode, startDate: number, endDate: number): Record<address, balanceNumber> => {
+
+        const txs: Transaction[] = rootGetters['transactions/txsByFilters']({
+          to: node.rewardAddress,
+          type: TransactionType.Reward,
+          startDate,
+          endDate,
+        } as TransactionsFilters);
+
+        return txs.reduce((recordAddressRewards: Record<address, balanceNumber>, currentTx: Transaction) => {
+
+          currentTx.outputs.forEach((output: TransactionOutput) => {
+            recordAddressRewards[output.address] = output.value + (recordAddressRewards[output.address] || 0);
+          });
+
+          return recordAddressRewards;
+
+        }, {});
+
+      },
   }),
   actions: {
     async fetchNodeRewards({ dispatch }: any, filters: NodeRewardsFilters) {
@@ -105,7 +126,7 @@ export default {
     async fetchNodeStakingRewards({ dispatch, rootGetters }: any, filters: StakingRewardsFilters) {
 
       const blocksFilters: BlocksFilters = {
-        pagination: 0, // config.app.stakingRewardsBlocksAverage, // 200
+        pagination: 0, // config.app.stakingRewardsBlocksAverage,
         producer: filters.node.packingAddress,
         startDate: filters.startDate,
         endDate: filters.endDate,
@@ -132,6 +153,19 @@ export default {
     },
     async fetchNodeServerCosts({ dispatch, rootGetters }: any, node: ConsensusAgentNode) {
       await dispatch('price/fetchPrice', undefined, { root: true });
+    },
+    async fetchStakersAutoRewards({ dispatch }: any, filters: NodeRewardsFilters) {
+
+      const transactionsFilters: TransactionsFilters = {
+        pagination: 0,
+        to: filters.node.rewardAddress,
+        type: TransactionType.Reward,
+        startDate: filters.startDate,
+        endDate: filters.endDate,
+      };
+
+      await dispatch('transactions/fetchTransactions', transactionsFilters, { root: true });
+
     },
   },
 };

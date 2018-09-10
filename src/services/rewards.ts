@@ -14,7 +14,7 @@ export function calculateStakingRewardsPerRound(node: ConsensusAgentNode, blocks
 
       if (agentNode) {
 
-        const stakedAmount: balanceNumber = agentNode.totalDeposit; // (agentNode.deposit + agentNode.totalDeposit);
+        const stakedAmount: balanceNumber = agentNode.deposit + agentNode.totalDeposit;
         const blockByHeight: Block | undefined = blocks.find((block: Block) => block.height === consensus.consensus.height);
 
         if (blockByHeight) {

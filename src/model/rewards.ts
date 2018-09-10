@@ -21,7 +21,7 @@ export interface NodeRewards {
   };
   nodeBalance: balanceNumber;
   totalRewards: balanceNumber;
-  stakingRewards: balanceNumber;
-  serverCosts: ConfigServerCosts;
+  stakingRewards?: balanceNumber;
+  serverCosts?: ConfigServerCosts;
   totalToShare: balanceNumber;
 }
