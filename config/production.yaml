@@ -1,6 +1,6 @@
 app:
   env: production
-  metaBase: /nuls-shared-node-rewards-calculator/
+  # metaBase: /nuls-shared-node-rewards-calculator/
   localStoreKey: nulsSharedNodeRewardsCalculator
   api:
     nulsWorld:
